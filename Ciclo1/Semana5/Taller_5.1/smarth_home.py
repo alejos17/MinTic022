@@ -24,8 +24,8 @@ def separar_cadenas(comando):
     x = comando.split("@")   #Lista creada con cada item
     print(x)
 
-    for element in x:
-      y=x[element]
+    for i in range(len(x)):
+      y=x[i]
       z=y.split(",")  
     
     print(z)
