@@ -24,11 +24,17 @@ def separar_cadenas(comando):
     x = comando.split("@")   #Lista creada con cada item
     print(x)
 
+    for element in x:
+      y=x[element]
+      z=y.split(",")  
+    
+    print(z)
     #TODO
     #Crear un for que recorra x y saque en 3 variables cada dato,
     #luego crear una tupla con nombre y guardar esos datos en la
     #estructura creada, luego de tener la tupla, se puede pedir valores
     #por tipo de dispositivo o tipo de dato etc.  
+
 
 
     return "No implementado"
