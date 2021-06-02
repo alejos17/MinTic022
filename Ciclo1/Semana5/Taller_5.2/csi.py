@@ -8,10 +8,10 @@
 # ====================================================================
 
 #----------Definición de Funciones (Dividir)------------
-diccionario={1:9,2:8,3:7,4:6,5:0,6:4,7:3,8:2,9:1,0:5}
+diccionario={"1":9,"2":8,"3":7,"4":6,"5":0,"6":4,"7":3,"8":2,"9":1,"0":5}
 
 print(diccionario)
-print(diccionario[3])
+#print(diccionario[3])
 
 def codificar_mensaje(msg):
   """ 
@@ -24,14 +24,26 @@ def codificar_mensaje(msg):
   mensaje_codificado:string
     El mensaje codificado con la estrategia saltando al 5    
   """
-  msgc=[]
-  msg=eval(msg)
+  #TODO desglosar la cadena para sacar los digitos
+  num=[]
+  for element in msg:  #Comenzar en 0 e ir hasta la cantidad de la cadena
+      if element.isdigit():
+        num.append(element)
 
-  for element in msg:
+  print("Numeros: ",num)
+
+  #TODO pasarlos por el diccionario para codificarlos
+
+  msgc=[]
+  for element in num:
     if element in diccionario:
       msgc.append(diccionario[element])
 
-  print(msgc)
+  #TODO re-armar la cadena como estaba con los nuevos numeros
+  
+
+  
+  print("Numeros cambiados: ",msgc)
 
   return "No implementado"
 
