@@ -8,7 +8,7 @@
 # ====================================================================
 
 #----------Definición de Funciones (Dividir)------------
-diccionario={"1":9,"2":8,"3":7,"4":6,"5":0,"6":4,"7":3,"8":2,"9":1,"0":5}
+diccionario={"1":9,"2":8,"3":7,"4":6,"5":0,"6":4,"7":3,"8":2,"9":1,"0":5,":":":","-":"-"}
 
 print(diccionario)
 #print(diccionario[3])
@@ -25,25 +25,34 @@ def codificar_mensaje(msg):
     El mensaje codificado con la estrategia saltando al 5    
   """
   #TODO desglosar la cadena para sacar los digitos
-  num=[]
+  msg_lista=msg.split()
+  print("mensaje en lista: ",msg_lista)
+
+  num=[]  #se crea lista para guardar solamente los numeros y simbolo : y -
   for element in msg:  #Comenzar en 0 e ir hasta la cantidad de la cadena
-      if element.isdigit():
-        num.append(element)
+      if element.isdigit() or element==":" or element=="-":
+        num.append(element)  #Si lo encuentra en la cadena lo agrega
+        
 
   print("Numeros: ",num)
 
   #TODO pasarlos por el diccionario para codificarlos
 
-  msgc=[]
-  for element in num:
-    if element in diccionario:
-      msgc.append(diccionario[element])
+  numc=[]   #lista para guardar los numeros codificados
+  for element in num:   #recorre la lista de numeros
+    if element in diccionario:   #compara cada elemento con el diccionario
+      numc.append(diccionario[element]) #guarda el resultado del diccionario
 
   #TODO re-armar la cadena como estaba con los nuevos numeros
-  
+  i=0
+  horanumc=
+  for i in range(4):   #Recorrer la hora
+    horanum
 
-  
-  print("Numeros cambiados: ",msgc)
+
+
+  strnumc= "".join(str(_) for _ in numc) #Pasa una lista a String, concatena
+  print("Numeros cambiados: ",strnumc)
 
   return "No implementado"
 
