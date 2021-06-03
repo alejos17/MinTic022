@@ -17,42 +17,25 @@ def separar_cadenas(comando):
         Una cadena con los datos de todos los IoT de una smarth-home 
     Returns
     -------
-    lista_IoT:[(namedtuple)]
+    registros:[(namedtuple)]
         una lista de tuplas cada una de ellas con los datos de un dispositivo IoT     
     """
     #Realizamos un split por tipo de dispositivo.
+    registros=[]  #Creación de lista para guardar las tuplas
     iot=namedtuple('IoT',['dispositivo','id','valor']) #Tupla con los datos 
     x = comando.split("@")   #Lista creada con cada item
-    print(x)
-    i=0
-    for i in range(len(x)):
-      print(" ")
-      y=x[i]
-      z=y.split(",")
-      print("Desplegado por coma: ",z)
-      a=z[0]
-      b=z[1]
-      c=z[2]
-      print("A: ",a," B:",b," C:",c)
-      d=iot(a,b,c)
-      print("Tupla llena: ",d)
-      
+        
+    for i in range(len(x)):  #Recorrer la lista para sacar cada dato
+      y=x[i]                 #Copia de la lista
+      z=y.split(",")         #Separar por comas
+      a=z[0]                 #Guardar primer dato
+      b=z[1]                 #Guardar segundo dato
+      c=z[2]                 #Guardar tercer dato
+      d=iot(a,b,c)           #Crear tupla IoT con cada valor
+      registros.append(d)    #Agregar la tupla a la lista
 
-    print(" ")
-    print(iot)
-    #TODO crear una lista para ir guardando las tuplas con los
-    #valores, luego recorrer la lista la posicion i de la lista
-    #y cargando lo que necesite ej.  x[i].dispositivo  o id
-    
-    #TODO
-    #Crear un for que recorra x y saque en 3 variables cada dato,
-    #luego crear una tupla con nombre y guardar esos datos en la
-    #estructura creada, luego de tener la tupla, se puede pedir valores
-    #por tipo de dispositivo o tipo de dato etc.  
-
-
-
-    return "No implementado"
+    #print("Dispositivos: ",registros[0].dispositivo)
+    return registros
 
 
 def calcular_estadisticas(lista_IoT):
@@ -65,5 +48,33 @@ def calcular_estadisticas(lista_IoT):
   -------
   estadistica:(total_on, total_off)
     una tupla con  el total de dispositivos IoT en estado ON y otra con el total de estado     
-  """  
-  return "No implementado"
+  """
+  #TODO reporte cantidad de dispositivos que estan en ON y en OFF
+  repon=[]
+  repoff=[]
+  for i in range(len(lista_IoT)):
+    if lista_IoT[i].valor=="ON":
+      repon.append(lista_IoT[i].dispositivo)
+      repon.append(lista_IoT[i].id)
+      repon.append(lista_IoT[i].valor)
+    elif lista_IoT[i].valor=="OFF":
+      repoff.append(lista_IoT[i].dispositivo)
+      repoff.append(lista_IoT[i].id)
+      repoff.append(lista_IoT[i].valor)
+
+  print("\n")
+  print("=======================================================================")
+  print("*** Dispositivos Activados ***")
+  for i in range(len(repon)):
+    print(repon[i])
+    
+
+  print("\n")
+  print("=======================================================================")
+  print("*** Dispositivos Desactivados ***")
+  for i in range(len(repoff)):
+    print(repoff[i])
+    
+    
+
+  return
