@@ -19,15 +19,13 @@ def menu():
     print("=======================================================\n")
     msg=input("Escriba el mensaje: ")
     print("\n")
-    print("El mensaje escrito es: ",msg)
-    print("\n")
     print("Que desea hacer?: ")
-    print("1. Codificar")
-    print("2. Decodificar")
-    print("3. Escribir otro mensaje a codificar")
-    print("4. Salir")
+    print("1. Codificar / Decodificar")
+    print("2. Escribir otro mensaje a codificar")
+    print("3. Salir")
     print(" ")
     op=int(input("Seleccione una opcion:  "))
+    print(" ")
     return op,msg
 
 #Bandera para entar al bucle del menú
@@ -37,12 +35,10 @@ while flag==1:
     if op==1: 
         c.codificar_mensaje(msg)
     elif op==2: 
-        c.decodificar_mensaje(msg)
-    elif op==3: 
         print(" ")
         msg=input("Escriba el nuevo mensaje: ")
         c.codificar_mensaje(msg)
-    elif op==4: 
+    elif op==3: 
         exit()
     else: print("Opción no valida, intente de nuevo")
 

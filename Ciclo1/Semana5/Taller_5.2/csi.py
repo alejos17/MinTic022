@@ -24,41 +24,44 @@ def codificar_mensaje(msg):
   mensaje_codificado:string
     El mensaje codificado con la estrategia saltando al 5    
   """
-  #TODO desglosar la cadena para sacar los digitos
+  #desglosar la cadena para sacar los digitos
+  print("El mensaje a codificar es: ",msg)
+  print("\n")
+
   msg_lista=msg.split()
-  print("mensaje en lista: ",msg_lista)
+  #print("mensaje en lista: ",msg_lista)
 
   num=[]  #se crea lista para guardar solamente los numeros y simbolo : y -
   for element in msg:  #Comenzar en 0 e ir hasta la cantidad de la cadena
       if element.isdigit() or element==":" or element=="-":
         num.append(element)  #Si lo encuentra en la cadena lo agrega
-        
-
-  print("Numeros: ",num)
-
-  #TODO pasarlos por el diccionario para codificarlos
+      
+  #print("Numeros: ",num)
+  
+  #pasarlos por el diccionario para codificarlos
 
   numc=[]   #lista para guardar los numeros codificados
   for element in num:   #recorre la lista de numeros
     if element in diccionario:   #compara cada elemento con el diccionario
       numc.append(diccionario[element]) #guarda el resultado del diccionario
 
-  #TODO re-armar la cadena como estaba con los nuevos numeros
+  #re-armar la cadena como estaba con los nuevos numeros
   horanumc=[]  #Guarda la hora modificada
   telnumc=[]   #Guarda el telefono modificado
   for i in range(0,5):   #Recorrer la hora
-    horanumc.append(numc[i])  #Agrega los numeros de la hora que son los primeros 5
+    horanumc.append(numc[i])
+    i+=1  #Agrega los numeros de la hora que son los primeros 5
   #El contador i continua sobre la lista de numeros modificados
   for i in range(i,len(numc)):
     telnumc.append(numc[i])  #Agrega los numeros del telefono que son el resto
   
   strtelnumc= "".join(str(_) for _ in telnumc)  
   strhoranumc= "".join(str(_) for _ in horanumc) #Pasa una lista a String, concatena
-  print("Numeros cambiados: ",strhoranumc)
+  #print("Numeros cambiados: ",numc)
 
-  print("El mensaje codificado es: ",msg_lista[0],strhoranumc,msg_lista[2],strtelnumc)
+  print("El mensaje codificado es: ",msg_lista[0],msg_lista[1],msg_lista[2],msg_lista[3],strhoranumc,msg_lista[5],msg_lista[6],strtelnumc)
 
-  return "No implementado"
+  return
 
 def decodificar_mensaje(mensaje_codificado):
   """ 
