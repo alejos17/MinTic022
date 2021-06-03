@@ -39,7 +39,7 @@ def calcular_estadisticas(lista_IoT):
   """ 
   Parameters
   ----------
- lista_IoT:[(namedtuple)]
+  lista_IoT:[(namedtuple)]
     Una lista de tuplas con los datos de los dispositivos IoT 
   Returns
   -------
@@ -56,7 +56,7 @@ def calcular_estadisticas(lista_IoT):
       liston.append(on)   #Se agrega a la lista de dispositivos ON
     elif lista_IoT[i].valor=="OFF":   #Para valores en OFF
       #Se crea una tupla por dispositivo
-      off=repon(lista_IoT[i].dispositivo,lista_IoT[i].id,lista_IoT[i].valor)
+      off=repoff(lista_IoT[i].dispositivo,lista_IoT[i].id,lista_IoT[i].valor)
       listoff.append(off)   #Se agreda a la lista de dispositivos OFF
 
   #Mensajes en pantalla para el usuario con las estadisticas
