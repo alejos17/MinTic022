@@ -40,7 +40,9 @@ def separar_cadenas(comando):
 
     print(" ")
     print(iot)
-    
+    #TODO crear una lista para ir guardando las tuplas con los
+    #valores, luego recorrer la lista la posicion i de la lista
+    #y cargando lo que necesite ej.  x[i].dispositivo  o id
     
     #TODO
     #Crear un for que recorra x y saque en 3 variables cada dato,
