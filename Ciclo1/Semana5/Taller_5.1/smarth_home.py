@@ -43,35 +43,37 @@ def calcular_estadisticas(lista_IoT):
     Una lista de tuplas con los datos de los dispositivos IoT 
   Returns
   -------
-  estadistica:(total_on, total_off)
-    una tupla con  el total de dispositivos IoT en estado ON y otra con el total de estado     
+    Imprime en pantalla el resultado de la estadistica, dispositivos en ON y en OFF     
   """
-  #TODO reporte cantidad de dispositivos que estan en ON y en OFF
-  repon=[]   #Lista para dispositivos en ON
-  repoff=[]  #Lista para dispositivos en OFF
+  liston=[]   #Lista para dispositivos en ON
+  listoff=[]  #Lista para dispositivos en OFF
+  repon=namedtuple('ON',['dispositivo','id','valor'])   #Tupla para dispositivos en ON
+  repoff=namedtuple('OFF',['dispositivo','id','valor'])  #Tupla para dispositivos en OFF
   for i in range(len(lista_IoT)):    #Recorrer tupla
     if lista_IoT[i].valor=="ON":     #Para valores en ON
-      repon.append(lista_IoT[i].dispositivo)      #Agregar a la lista
-      repon.append(lista_IoT[i].id)
-      repon.append(lista_IoT[i].valor)
+      #Se crea una tupla por dispositivo
+      on=repon(lista_IoT[i].dispositivo,lista_IoT[i].id,lista_IoT[i].valor)
+      liston.append(on)   #Se agrega a la lista de dispositivos ON
     elif lista_IoT[i].valor=="OFF":   #Para valores en OFF
-      repoff.append(lista_IoT[i].dispositivo)   #Agregar a la lista
-      repoff.append(lista_IoT[i].id)
-      repoff.append(lista_IoT[i].valor)
+      #Se crea una tupla por dispositivo
+      off=repon(lista_IoT[i].dispositivo,lista_IoT[i].id,lista_IoT[i].valor)
+      listoff.append(off)   #Se agreda a la lista de dispositivos OFF
 
+  #Mensajes en pantalla para el usuario con las estadisticas
+  #Imprimiendo las listas generadas de ON y OFF
   print("\n")
   print("=======================================================================")
   print("*** Dispositivos Activados ***")
-  for i in range(len(repon)):
-    print(repon[i])
+  print("Total: ",len(liston))
+  for i in range(len(liston)):
+    print(liston[i])
     
 
   print("\n")
   print("=======================================================================")
   print("*** Dispositivos Desactivados ***")
-  for i in range(len(repoff)):
-    print(repoff[i])
-    
-    
-
+  print("Total: ",len(listoff))
+  for i in range(len(listoff)):
+    print(listoff[i])
+  
   return

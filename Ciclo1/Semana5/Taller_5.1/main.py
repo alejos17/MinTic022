@@ -2,8 +2,8 @@
     Realiza lel calculo de estadisticas de Una 
     Smarth Home
     incorpora al modulo smarth_home.py
-    Oscar Franco-Bedoya
-    Mayo 20-2021 """
+    Alejandro Tamayo
+    Junio 3-2021 """
 
 #---------------- Zona librerias------------
 import smarth_home as sh
