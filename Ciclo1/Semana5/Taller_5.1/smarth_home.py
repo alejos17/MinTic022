@@ -1,14 +1,12 @@
 """ Modulo para el manejo de datos de dispositivos IoT 
     Alejandro Tamayo
-    Junio 2-2021 """
+    Junio 3-2021 """
 
 #======================================================================
 #          E S P A C I O    D E    T R A B A J O     A L U M N O
 # ====================================================================
 from collections import namedtuple
 #----------Definición de Funciones (Dividir)------------
-#tipo_dispositivo1,identificador1,estado1@tipo_dispositivo2,identificador2,estado2
-
 def separar_cadenas(comando):
     """ 
     Parameters
@@ -23,7 +21,7 @@ def separar_cadenas(comando):
     #Realizamos un split por tipo de dispositivo.
     registros=[]  #Creación de lista para guardar las tuplas
     iot=namedtuple('IoT',['dispositivo','id','valor']) #Tupla con los datos 
-    x = comando.split("@")   #Lista creada con cada item
+    x = comando.split("@")   #Lista creada con cada dispositivo
         
     for i in range(len(x)):  #Recorrer la lista para sacar cada dato
       y=x[i]                 #Copia de la lista
@@ -34,7 +32,6 @@ def separar_cadenas(comando):
       d=iot(a,b,c)           #Crear tupla IoT con cada valor
       registros.append(d)    #Agregar la tupla a la lista
 
-    #print("Dispositivos: ",registros[0].dispositivo)
     return registros
 
 
@@ -50,15 +47,15 @@ def calcular_estadisticas(lista_IoT):
     una tupla con  el total de dispositivos IoT en estado ON y otra con el total de estado     
   """
   #TODO reporte cantidad de dispositivos que estan en ON y en OFF
-  repon=[]
-  repoff=[]
-  for i in range(len(lista_IoT)):
-    if lista_IoT[i].valor=="ON":
-      repon.append(lista_IoT[i].dispositivo)
+  repon=[]   #Lista para dispositivos en ON
+  repoff=[]  #Lista para dispositivos en OFF
+  for i in range(len(lista_IoT)):    #Recorrer tupla
+    if lista_IoT[i].valor=="ON":     #Para valores en ON
+      repon.append(lista_IoT[i].dispositivo)      #Agregar a la lista
       repon.append(lista_IoT[i].id)
       repon.append(lista_IoT[i].valor)
-    elif lista_IoT[i].valor=="OFF":
-      repoff.append(lista_IoT[i].dispositivo)
+    elif lista_IoT[i].valor=="OFF":   #Para valores en OFF
+      repoff.append(lista_IoT[i].dispositivo)   #Agregar a la lista
       repoff.append(lista_IoT[i].id)
       repoff.append(lista_IoT[i].valor)
 
