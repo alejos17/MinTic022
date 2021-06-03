@@ -44,15 +44,19 @@ def codificar_mensaje(msg):
       numc.append(diccionario[element]) #guarda el resultado del diccionario
 
   #TODO re-armar la cadena como estaba con los nuevos numeros
-  i=0
-  horanumc=
-  for i in range(4):   #Recorrer la hora
-    horanum
+  horanumc=[]  #Guarda la hora modificada
+  telnumc=[]   #Guarda el telefono modificado
+  for i in range(0,5):   #Recorrer la hora
+    horanumc.append(numc[i])  #Agrega los numeros de la hora que son los primeros 5
+  #El contador i continua sobre la lista de numeros modificados
+  for i in range(i,len(numc)):
+    telnumc.append(numc[i])  #Agrega los numeros del telefono que son el resto
+  
+  strtelnumc= "".join(str(_) for _ in telnumc)  
+  strhoranumc= "".join(str(_) for _ in horanumc) #Pasa una lista a String, concatena
+  print("Numeros cambiados: ",strhoranumc)
 
-
-
-  strnumc= "".join(str(_) for _ in numc) #Pasa una lista a String, concatena
-  print("Numeros cambiados: ",strnumc)
+  print("El mensaje codificado es: ",msg_lista[0],strhoranumc,msg_lista[2],strtelnumc)
 
   return "No implementado"
 
