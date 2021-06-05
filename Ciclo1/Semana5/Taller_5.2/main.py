@@ -19,10 +19,9 @@ def menu():
     print("=======================================================\n")
     print("\n")
     print("Que desea hacer?: ")
-    print("1. Escribir mensaje de ejemplo")
-    print("2. Escribir mensaje manual (Formato ejercicio)")
-    print("3. Codificar / Decodificar")
-    print("4. Salir")
+    print("1. Escribir mensaje de ejemplo y Codificar")
+    print("2. Escribir mensaje manual para Codificar / Decodificar")
+    print("3. Salir")
     print(" ")
     op=int(input("Seleccione una opcion:  "))
     print(" ")
@@ -36,13 +35,12 @@ while flag==1:
         msg=("Llamar después de las 12:15 al teléfono 1-800-329-8044")
         print("****** MENSAJE CARGADO ******")
         print("es: ",msg)
+        c.codificar_mensaje(msg)
     elif op==2: 
         print(" ")
         msg=input("Escriba el mensaje: ")
-        c.codificar_mensaje(msg)
-    elif op==3: 
-        c.codificar_mensaje(msg)
-    elif op==4: exit()
+        c.decodificar_mensaje(msg)
+    elif op==3: exit()
     else: print("Opción no valida, intente de nuevo")
 
 #======================================================================

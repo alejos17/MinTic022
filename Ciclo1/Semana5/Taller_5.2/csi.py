@@ -22,22 +22,30 @@ def codificar_mensaje(msg):
     imprime en pantalla al usuario  
   """
   #desglosar la cadena para sacar los digitos
+  print("=============================================================================")
   print("El mensaje a codificar es: ",msg)
+  print("=============================================================================")
   print("\n")
 
   msg_lista=msg.split()
-  
+  print("Mensaje separado por palabras: ",msg_lista)
+  print("\n")
+
   num=[]  #se crea lista para guardar solamente los numeros y simbolo : y -
   for element in msg:  #Comenzar en 0 e ir hasta la cantidad de la cadena
       if element.isdigit() or element==":" or element=="-":
         num.append(element)  #Si lo encuentra en la cadena lo agrega
-      
+
+  print("Lista con solo numeros:",num)
+  print("\n")
   #pasarlos por el diccionario para codificarlos
   numc=[]   #lista para guardar los numeros codificados
   for element in num:   #recorre la lista de numeros
     if element in diccionario:   #compara cada elemento con el diccionario
       numc.append(diccionario[element]) #guarda el resultado del diccionario
 
+  print("Lista de numeros pasados por diccionario y modificados: ",numc)
+  print("\n")
   #re-armar la cadena como estaba con los nuevos numeros
   horanumc=[]  #Guarda la hora modificada
   telnumc=[]   #Guarda el telefono modificado
@@ -48,28 +56,54 @@ def codificar_mensaje(msg):
   for i in range(i,len(numc)):
     telnumc.append(numc[i])  #Agrega los numeros del telefono que son el resto
   
+  print("Lista con la hora modificada: ",horanumc)
+  print("Lista con el telefono modificado: ",telnumc)
+  print("\n")
   #Funcion .join para concatenar listas a string
   strtelnumc= "".join(str(_) for _ in telnumc)  
   strhoranumc= "".join(str(_) for _ in horanumc) #Pasa una lista a String, concatena
   
+  print("Se unen los valores modificados al mensaje original en sus mismos indices")
   #Se arma la cadena nuevamente con la posicion de cada palabra del mensaje en la misma
   #posicion y se agregan los numeros modificados.
   print("El mensaje codificado es: ",msg_lista[0],msg_lista[1],msg_lista[2],msg_lista[3],strhoranumc,msg_lista[5],msg_lista[6],strtelnumc)
 
   return
 
-"""
-def decodificar_mensaje(mensaje_codificado):
 
-   Parameters
-   ----------
-   mensaje_codificado:string
-     Una cadena con el mensaje codificado
-   Returns
-    -------
-   mensaje_codificado:string
-     El mensaje original decodificado
+def decodificar_mensaje(msg):
+  """
+  Parameters
+  ----------
+  msg:string
+    Una cadena con el mensaje a codificar 
+  Returns
+  -------
+    imprime en pantalla al usuario  
+  """
+  #desglosar la cadena para sacar los digitos
+  print("El mensaje a codificar es: ",msg)
+  print("\n")
 
+  num=[]  #se crea lista para guardar solamente los numeros y simbolo : y -
+  for element in msg:  #Comenzar en 0 e ir hasta la cantidad de la cadena
+      if element.isdigit():
+        num.append(element)  #Si lo encuentra en la cadena lo agrega
+      
+  #pasarlos por el diccionario para codificarlos
+  numc=[]   #lista para guardar los numeros codificados
+  for element in num:   #recorre la lista de numeros
+    if element in diccionario:   #compara cada elemento con el diccionario
+      numc.append(diccionario[element]) #guarda el resultado del diccionario
 
-  return "No implementado"
-"""
+  #re-armar la cadena como estaba con los nuevos numeros
+  codnumc=[]   #Guarda el telefono modificado
+  for i in range(len(numc)):
+    codnumc.append(numc[i])  #Agrega los numeros del telefono que son el resto
+    #Funcion .join para concatenar listas a string
+  strcodnumc= "".join(str(_) for _ in codnumc)  
+  
+  #Se arma la cadena nuevamente con la posicion de cada palabra del mensaje en la misma
+  #posicion y se agregan los numeros modificados.
+  print("El mensaje codificado es: ",strcodnumc)
+  return 
