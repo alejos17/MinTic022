@@ -16,18 +16,27 @@ def solicitud_datos():
         edad=0
         fecha_cita=input("Cual fue el día de aplicación de la vacuna?: (dd/mm/yy)")
         hora_cita=input("Cual fue la hora de la cita?: (hh:mm)")
-        print("Que vacuna le fue aplicada?: ")
-        print("1. Pfizer")
-        print("2. AstraZeneca")
-        print("3. Moderna")
-        print("4. Sinovac")
-        opv=int(input("Seleccione: "))
-        vacuna=""
-        while opv<=0 or opv>4:
-            if opv==1: vacuna=vacunas[0]
-            elif opv==2: vacuna=vacunas[1]
-            elif opv==3: vacuna=vacunas[2]
-            elif opv==4: vacuna=vacunas[3]
+        
+        flag=1
+        while flag==1:
+            print("Que vacuna le fue aplicada?: ")
+            print("1. Pfizer")
+            print("2. AstraZeneca")
+            print("3. Moderna")
+            print("4. Sinovac")
+            opv=int(input("Seleccione: "))
+            if opv==1: 
+                vacuna=vacunas[0]
+                flag=2
+            elif opv==2: 
+                vacuna=vacunas[1]
+                flag=2
+            elif opv==3: 
+                vacuna=vacunas[2]
+                flag=2
+            elif opv==4: 
+                vacuna=vacunas[3]
+                flag=2
             else: print("opcion incorreta")
         
         p=pacientes(cedula,nombre,apellido,etapa,fecha_nac,edad,fecha_cita,hora_cita,vacuna)
@@ -44,9 +53,19 @@ def solicitud_datos():
     return lista_pacientes
 
 def listar_datos(lista_pacientes):
-    for element in lista_pacientes:
+    for element in range(len(lista_pacientes)):
         print(lista_pacientes[element])
+        print("-----------------------------------------")
     return
+
+def datos_ejemplo():
+    pacientes=namedtuple('Pacientes',['id','nombre','apellido','etapa','fecha_nac','edad','fecha_cita','hora_cita','vacuna'])
+    
+    vacunas=['Pfizer','AstrazZeneca','Moderna','Sinovac']
+    
+    lista_pacientes=[Pacientes(id='16078823', nombre='Alejandro', apellido='Tamayo', etapa='5', fecha_nac='17/02/1984', edad=0, fecha_cita='25/05/2021', hora_cita='10:00', vacuna='Sinovac'), Pacientes(id='1013597214', nombre='Sandra', apellido='Pachon', etapa='3', fecha_nac='15/06/1988', edad=0, fecha_cita='27/05/2021', hora_cita='10:40', vacuna='Moderna')]
+    
+    return lista_pacientes
 
 def menu():
     print("\n")
@@ -67,7 +86,7 @@ while flag==1:
     op=menu()
     if op==1: 
         lista_pacientes=solicitud_datos()
-    elif op==2: listar_datos()
+    elif op==2: listar_datos(lista_pacientes)
     elif op==3: exit()
     else: print("Opción no valida, intente de nuevo")
 
