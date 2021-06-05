@@ -59,23 +59,65 @@ def listar_datos(lista_pacientes):
     return
 
 def datos_ejemplo():
-    pacientes=namedtuple('Pacientes',['id','nombre','apellido','etapa','fecha_nac','edad','fecha_cita','hora_cita','vacuna'])
+    lid=['16078823','1013597214']
+    lnombres=['Alejandro','Sandra']
+    lapellido=['Tamayo','Pachon']
+    letapa=['5','3']
+    lfecha_nac=['17/02/1984','15/06/1988']
+    ledad=['37','34']
+    lfecha_cita=['25/05/2021','27/05/2021']
+    lhora_cita=['10:00','10:40']
+    lvacuna=['Pfizer','Sinovac']
+
+    for i in range(len(lid)):
+        p=pacientes(lid[i],lnombres[i],lapellido[i],letapa[i],lfecha_nac[i],ledad[i],lfecha_cita[i],lhora_cita[i],lvacuna[i])
+        lista_pacientes.append(p)
     
-    vacunas=['Pfizer','AstrazZeneca','Moderna','Sinovac']
-    
-    lista_pacientes=[Pacientes(id='16078823', nombre='Alejandro', apellido='Tamayo', etapa='5', fecha_nac='17/02/1984', edad=0, fecha_cita='25/05/2021', hora_cita='10:00', vacuna='Sinovac'), Pacientes(id='1013597214', nombre='Sandra', apellido='Pachon', etapa='3', fecha_nac='15/06/1988', edad=0, fecha_cita='27/05/2021', hora_cita='10:40', vacuna='Moderna')]
-    
+    print("Datos cargados: ")
+    print(lista_pacientes)
+
     return lista_pacientes
+
+def busqueda(lista_pacientes):
+    flag=1
+    while flag==1:
+        print("Desea buscar por?: ")
+        print("1. Documento")
+        print("1. Nombre de Paciente")
+        print("2. Apellido de Paciente")
+        print("3. Tipo de Vacuna")
+        print("4. Etapa de Vacunación")
+        opv=int(input("Seleccione: "))
+        if opv==1: 
+            b=input("Indique el documento a buscar: ")
+            for x in range(len(lista_pacientes)):
+                if b==lista_pacientes[x].id:
+                    print(lista_pacientes[x].id)
+            flag=2
+        elif opv==2: 
+            vacuna=vacunas[1]
+            flag=2
+        elif opv==3: 
+            vacuna=vacunas[2]
+            flag=2
+        elif opv==4: 
+            vacuna=vacunas[3]
+            flag=2
+        else: print("opcion incorreta")
+    
+    print("La busqueda es: ")
+    return
 
 def menu():
     print("\n")
     print("=======================================================")
     print("Bienvenido al Reto 5")
     print("Vacunas:\n")
-    print("1. Solicitud datos")
-    print("2. Listar Datos")
-    print("3. Correr programa")
-    print("4. Salir")
+    print("1. Cargar datos ejemplo")
+    print("2. Solicitar datos manual")
+    print("3. Listar Datos")
+    print("4. Buscar")
+    print("5. Salir")
     print(" ")
     op=int(input("Seleccione una opcion:  "))
     return op
@@ -85,9 +127,11 @@ flag=1
 while flag==1:
     op=menu()
     if op==1: 
-        lista_pacientes=solicitud_datos()
-    elif op==2: listar_datos(lista_pacientes)
-    elif op==3: exit()
+        lista_pacientes=datos_ejemplo()
+    elif op==2: lista_pacientes=solicitud_datos()
+    elif op==3: listar_datos(lista_pacientes)
+    elif op==4: busqueda(lista_pacientes)
+    elif op==5: exit()
     else: print("Opción no valida, intente de nuevo")
 
 
