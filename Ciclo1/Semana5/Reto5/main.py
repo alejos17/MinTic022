@@ -61,8 +61,8 @@ TODO
     - hora de cita
     - tipo de vacuna aplicada
 
-2. Guardar tupla tipo paciente con los datos
-3. Guardar una lista de pacientes con la tupla
+2. Guardar tupla tipo paciente con los datos  ya
+3. Guardar una lista de pacientes con la tupla   ya
 4. contar el total de pacientes en la lista para el primer reporte
 5. sacar los datos por cada tipo de vacuna
 6. armar nuevas tuplas por tipo de vacuna
