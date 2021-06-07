@@ -70,7 +70,7 @@ keys = [
 #	Key([], "0x08f6", lazy.spawn(cmus-remote --pause)),
 
     Key([mod], "e", lazy.spawn("thunar")),
-    Key([mod], "v", lazy.spawn("code")),
+    Key([mod], "c", lazy.spawn("code")),
     Key([mod], "t", lazy.spawn("telegram-desktop")),
     Key([mod], "w", lazy.spawn("google-chrome")),
     Key([mod], "m", lazy.spawn("mousepad")),
