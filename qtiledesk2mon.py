@@ -76,7 +76,8 @@ keys = [
     Key([mod], "m", lazy.spawn("mousepad")),
     Key([mod], "v", lazy.spawn("virtualbox")),
     Key([mod], "d", lazy.spawn("/bin/sh '/opt/jd2/JDownloader2'")),
-
+    Key([mod], "n", lazy.spawn('"/usr/bin/nextcloud" --background')),
+    
 ]
 
 __groups = {
@@ -276,12 +277,14 @@ wmname = "LG3D"
 
 autostart = [
 	"feh --bg-fill /home/alejos17/Pictures/gato.png",
-	"picom -b",
 	"nm-applet &",   #Mostrar icono de red 
     "dropbox start -i",   #Lanzar Dropbox
-    '"/usr/bin/nextcloud" --background',   #Lanzar Nextcloud
-    "telegram-desktop -autostart"   #Lanzar telegram
+    
 ]
 
 for x in autostart:
 	os.system(x)
+
+#"picom -b",
+#'"/usr/bin/nextcloud" --background',   #Lanzar Nextcloud    
+#"telegram-desktop -autostart"   #Lanzar telegram
