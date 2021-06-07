@@ -275,7 +275,7 @@ wmname = "LG3D"
 autostart = [
 	"feh --bg-fill /home/alejos17/Pictures/gato.png",
 	"picom -b",
-	"nm-applet &",
+	"nm-applet &",   #comando para mostrar icono de redes en systemtray
 ]
 
 for x in autostart:
