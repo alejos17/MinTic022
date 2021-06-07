@@ -91,16 +91,20 @@ keys = [
 ]
 
 ##### GROUPS #####
-group_names = [("WWW", {'layout': 'monadtall'}),
-               ("CONSOLE", {'layout': 'monadtall'}),
-               ("RDP", {'layout': 'treetab'}),
-               ("CODE", {'layout': 'monadtall'}),
+group_names = [("CHROME", {'layout': 'monadtall'}),
+               ("VSCODE", {'layout': 'monadtall'}),
+               ("ARCHIVOS", {'layout': 'treetab'}),
                ("CHAT", {'layout': 'monadtall'}),
-               ("MUS", {'layout': 'monadtall'}),
-               ("FILES", {'layout': 'monadtall'}),
+               ("OTROS", {'layout': 'monadtall'}),
                ]
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
+
+#Funcion para cambiar de grupo con un key
+def latest_group(qtile):
+    qtile.current_screen.set_group(qtile.current_screen.previous_group)
+
+keys += [Key(["mod4"], "s", lazy.function(latest_group))]
 
 for i, (name, kwargs) in enumerate(group_names, 1):
     keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
@@ -110,7 +114,7 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 ##### DEFAULT THEME SETTINGS FOR LAYOUTS #####
 layout_theme = {"border_width": 2,
                 "margin": 4,
-                "border_focus": "AD69AF",
+                "border_focus": "115e1e",
                 "border_normal": "1D2330"
                 }
 
@@ -130,9 +134,9 @@ layouts = [
     layout.MonadTall(**layout_theme),
     #layout.Max(**layout_theme),
     layout.TreeTab(
-         font = "Ubuntu",
+         font = "Ubuntu Mono",
          fontsize = 10,
-         sections = ["FIRST", "SECOND"],
+         sections = ["Apps"],
          section_fontsize = 11,
          bg_color = "141414",
          active_bg = "90C435",
@@ -141,7 +145,7 @@ layouts = [
          inactive_fg = "a0a0a0",
          padding_y = 5,
          section_top = 10,
-         panel_width = 320
+         panel_width = 120
          ),
      layout.Floating(**layout_theme)
 ]
@@ -151,8 +155,8 @@ colors = [["#282a36", "#282a36"], # panel background
           ["#434758", "#434758"], # background for current screen tab
           ["#ffffff", "#ffffff"], # font color for group names
           ["#ff5555", "#ff5555"], # background color for layout widget
-          ["#A77AC4", "#A77AC4"], # dark green gradiant for other screen tabs
-          ["#7197E7", "#7197E7"]] # background color for pacman widget
+          ["#084a11", "#084a11"], # dark green gradiant for other screen tabs
+          ["#136334", "#136334"]] # background color for pacman widget
 
 ##### PROMPT #####
 prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
@@ -270,53 +274,28 @@ def init_widgets_list():
                         padding=0,
                         fontsize=14
                         ),
-               widget.TextBox(
+              widget.TextBox(
                         fontsize=14,
                         text = "⚡",
-                        foreground=colors[5],
+                        foreground=colors[2],
+                        background=colors[5],
                         padding = 0
-                        ),
-               widget.Battery(
-                        battery=0+1,
-                        discharge_char='...',
+                       ),
+              widget.Battery(
+	                    battery = 0,
+	                    format = "{char} {percent:0.1%}",
                         fontsize=14,
-                        foreground=colors[5],
-                        format="{percent:2.0%} {char}",
-		                ),
-               widget.TextBox(
-                        text='|',
-                        background = colors[2],
-                        foreground = colors[5],
-                        padding=0,
-                        fontsize=14
+                        foreground = colors[2],
+                        background = colors[5],
+	                    update_interval = 5,
+	                    low_percentage = 0.05,
+	                    full_char = "",
+	                    charge_char = "+",
+	                    discharge_char = "-",
+	                    empty_char = "",
+	                    
                         ),
-               widget.TextBox(
-                        text='|',
-                        background = colors[2],
-                        foreground = colors[5],
-                        padding=0,
-                        fontsize=14
-                        ),
-               widget.TextBox(
-                        fontsize=14,
-                        text = "🕸️",
-                        foreground=colors[5],
-                        padding = 0
-                        ),
-                widget.Wlan(
-                        fontsize=14,
-                        interface="wlp4s0",
-                        format="{essid}",
-                        foreground=colors[5],
-                        disconnected_message="offline"
-		                ),
-                widget.Wlan(
-                        interface="wlp4s0",
-                        fontsize=14,
-                        format="{percent:2.0%}",
-                        foreground=colors[5],
-		                ),
-               widget.TextBox(
+              widget.TextBox(
                         text='|',
                         background = colors[2],
                         foreground = colors[5],
@@ -363,7 +342,8 @@ def init_widgets_list():
                         ),
                widget.QuickExit(
                         fontsize=14,
-                        foreground=colors[5],
+                        foreground=colors[2],
+                        background=colors[5],
                         countdown_start=4,
                         countdown_format='{}',
                         default_text="🐧"
@@ -453,3 +433,12 @@ def start_once():
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+autostart = [
+	"feh --bg-fill /home/alejos17/Pictures/gato.png",
+	"picom -b",
+	"nm-applet &",
+]
+
+for x in autostart:
+	os.system(x)
