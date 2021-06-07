@@ -70,10 +70,12 @@ keys = [
 #	Key([], "0x08f6", lazy.spawn(cmus-remote --pause)),
 
     Key([mod], "e", lazy.spawn("thunar")),
-    Key([mod], "v", lazy.spawn("code")),
+    Key([mod], "c", lazy.spawn("code")),
     Key([mod], "t", lazy.spawn("telegram-desktop")),
     Key([mod], "w", lazy.spawn("google-chrome")),
     Key([mod], "m", lazy.spawn("mousepad")),
+    Key([mod], "v", lazy.spawn("virtualbox")),
+    Key([mod], "d", lazy.spawn("/bin/sh '/opt/jd2/JDownloader2'")),
 
 ]
 
@@ -82,7 +84,7 @@ __groups = {
     2: Group("WWW", matches=[Match(wm_class=["google-chrome"])]),
     3: Group("DEV", matches=[Match(wm_class=["code"])]),
     4: Group("CHAT", matches=[Match(wm_class=["telegram-desktop"])]),
-    5: Group("OTROS"),
+    5: Group("OTROS", matches=[Match(wm_class=["nextcloud"])]),
 }
 groups = [__groups[i] for i in __groups]
 
@@ -168,7 +170,7 @@ screens = [
                     restart_indicator="Restart!!"
                 ),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.TextBox(text="Alejandro - Pantalla Ppal"),
+                widget.TextBox(text="** Alejandro - Pantalla Ppal **"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text=" 🖬"),
                 widget.Memory(),
@@ -210,7 +212,7 @@ screens = [
                 #widget.Prompt(),
                 widget.WindowName(foreground="#999999"),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.TextBox(text="Alejandro - Pantalla 2"),
+                widget.TextBox(text="** Alejandro - Pantalla 2 **"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🔊"),
                 widget.Volume(),
@@ -275,7 +277,10 @@ wmname = "LG3D"
 autostart = [
 	"feh --bg-fill /home/alejos17/Pictures/gato.png",
 	"picom -b",
-	"nm-applet &",   #comando para mostrar icono de redes en systemtray
+	"nm-applet &",   #Mostrar icono de red 
+    "dropbox start -i",   #Lanzar Dropbox
+    '"/usr/bin/nextcloud" --background',   #Lanzar Nextcloud
+    "telegram-desktop -autostart"   #Lanzar telegram
 ]
 
 for x in autostart:
