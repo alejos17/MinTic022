@@ -4,6 +4,8 @@
 
 # Definición de Funciones (Dividir)
 from collections import namedtuple
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 #======================================================================
 #          E S P A C I O    D E    T R A B A J O     A L U M N O
 # =====================================================================
@@ -27,8 +29,9 @@ def solicitud_datos():
         nombre=input("Digite su nombre: ")
         apellido=input("Digite su apellido: ")
         etapa=input("Digite la etapa asignada del paciente: ")
-        fecha_nac=input("Digite su fecha de nacimiento: (dd/mm(yy)")
-        edad=0
+        fecha_nac=datetime.strptime(input("Fecha de Nacimiento  d/m/a: "), "%d/%m/%Y")
+        edad=relativedelta(datetime.now(), fecha_nac)
+        edad=edad.years
         fecha_cita=input("Cual fue el día de aplicación de la vacuna?: (dd/mm/yy)")
         hora_cita=input("Cual fue la hora de la cita?: (hh:mm)")
         
@@ -67,7 +70,6 @@ def solicitud_datos():
             flag=1
 
         print(lista_pacientes)
-    #TODO Calcular la edad y tener el valor en int
     return lista_pacientes
 
 def listar_datos(lista_pacientes):
@@ -138,9 +140,13 @@ def listar_datos(lista_pacientes):
         elif letapa[x]=="5":
             letapa5.append(letapa[x])
 
+    for element in range(len(lista_pacientes)):
+        print(lista_pacientes[element])
+        print("-----------------------------------------")
+    
     #Mensajes en Pantalla
     print("\n")
-    print("Se tienen registrados: ",len(lista_pacientes),"pacientes")
+    print("Se tienen registrados: ",len(lista_pacientes),"pacientes\n")
     print("Pesonas vacunadas con Pfizer: ",len(lvacunap))
     print("Pesonas vacunadas con AstraZeneca: ",len(lvacunaa))
     print("Pesonas vacunadas con Moderna: ",len(lvacunam))
@@ -152,10 +158,7 @@ def listar_datos(lista_pacientes):
     print("Personas Vacunadas de Etapa 4: ",len(letapa4))
     print("Personas Vacunadas de Etapa 5: ",len(letapa5))
     print("\n")
-
-    for element in range(len(lista_pacientes)):
-        print(lista_pacientes[element])
-        print("-----------------------------------------")
+    
     return
 
 def datos_ejemplo():
@@ -167,12 +170,12 @@ def datos_ejemplo():
     lista_pacientes:[(namedtuple)]
         Se genera la lista de pacientes con datos de ejemplo anexados para pruebas rápidas
     """
-    lid=['16078823','1013597214','70119227','30290206']
-    lnombres=['Alejandro','Sandra','Jorge','Gloria']
-    lapellido=['Tamayo','Pachon','Tamayo','Zuluaga']
+    lid=['18398275','50345789','1098345678','12890456']
+    lnombres=['Carlos','Ramon','Aurelio','Ramiro']
+    lapellido=['Ramirez','Pachon','Bedoya','Garcia']
     letapa=['5','3','2','2']
-    lfecha_nac=['17/02/1984','15/06/1988','17/01/1984','14/12/1963']
-    ledad=['37','34','65','60']
+    lfecha_nac=['17/06/1984','23/06/1988','20/01/1979','27/12/1953']
+    ledad=['37','33','42','58']
     lfecha_cita=['25/05/2021','27/05/2021','26/05/2021','27/05/2021']
     lhora_cita=['10:00','10:40','11:40','10:20']
     lvacuna=['Pfizer','Sinovac','Sinovac','Pfizer']
