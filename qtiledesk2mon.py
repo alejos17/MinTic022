@@ -82,19 +82,13 @@ __groups = {
     2: Group("WWW", matches=[Match(wm_class=["google-chrome"])]),
     3: Group("DEV", matches=[Match(wm_class=["code"])]),
     4: Group("CHAT", matches=[Match(wm_class=["telegram-desktop"])]),
-    0: Group("OTROS"),
+    5: Group("OTROS"),
 }
 groups = [__groups[i] for i in __groups]
 
 
 def get_group_key(name):
     return [k for k, g in __groups.items() if g.name == name][0]
-
-#Funcion para cambiar de grupo con un key
-def latest_group(qtile):
-    qtile.current_screen.set_group(qtile.current_screen.previous_group)
-
-keys += [Key(["mod4"], "s", lazy.function(latest_group))]
 
 for i in groups:
     keys.extend([
@@ -157,18 +151,25 @@ screens = [
                     borderwidth=0,
                     padding=10
                 ),
-                widget.Prompt(),
+                #widget.Prompt(),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.WindowName(foreground="#999999"),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.CheckUpdates(
-                    custom_command="checkupdates",
+                    custom_command="sudo apt update",
                     background="555555",
                     update_interval=1800,
+                    distro="LinuxLite",
                     colour_have_updates="00ff00",
                     colour_no_updates="ff5500",
-                    display_format='Actualitzacions: {updates}',
+                    display_format='Actualizaciones: {updates}',
                     padding=10,
-                    execute="rminal -e sudo pacman -Syyu",
+                    execute="alacritty -e sudo apt upgrade",
+                    restart_indicator="Restart!!"
                 ),
+                widget.TextBox(text="|", foreground = color_light2),
+                widget.TextBox(text="Alejandro - Pantalla Ppal"),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text=" 🖬"),
                 widget.Memory(),
                 widget.TextBox(text="|", foreground = color_light2),
@@ -191,6 +192,7 @@ screens = [
         ),
     ),
 
+#Segunda pantalla para dos monitores
     Screen(
         top=bar.Bar(
             [
@@ -205,33 +207,17 @@ screens = [
                     borderwidth=0,
                     padding=10
                 ),
-                widget.Prompt(),
+                #widget.Prompt(),
                 widget.WindowName(foreground="#999999"),
-                widget.CheckUpdates(
-                    custom_command="checkupdates",
-                    background="555555",
-                    update_interval=1800,
-                    colour_have_updates="00ff00",
-                    colour_no_updates="ff5500",
-                    display_format='Actualitzacions: {updates}',
-                    padding=10,
-                    execute="rminal -e sudo pacman -Syyu",
-                ),
-                widget.TextBox(text=" 🖬"),
-                widget.Memory(),
+                widget.TextBox(text="|", foreground = color_light2),
+                widget.TextBox(text="Alejandro - Pantalla 2"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🔊"),
                 widget.Volume(),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.Clock(format='%A, %B %d-%m-%Y %H:%M:%S', padding=10),
+                widget.Clock(format='%H:%M:%S', padding=10),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.Systray(),
                 widget.Sep(linewidth = 0, padding = 5),
-                widget.QuickExit(
-                    default_text="Salir",
-                    foreground=color_light,
-                    countdown_format="[ {} ]"
-                ),
             ],
             22,
             background="#222222",
@@ -239,25 +225,6 @@ screens = [
         ),
     ),
 ]
-
-"""
-def init_widgets_screen1():
-    widgets_screen1 = screens
-    return widgets_screen1                       # Slicing removes unwanted widgets on Monitors 1,3
-
-def init_widgets_screen2():
-    widgets_screen2 = screens
-    return widgets_screen2                       # Monitor 2 will display all widgets in widgets_list
-
-def init_screens():
-    return screens,screens,screens
-
-if __name__ in ["config", "__main__"]:
-    screens = init_screens()
-    widgets_list = 
-    widgets_screen1 = init_widgets_screen1()
-    widgets_screen2 = init_widgets_screen2()
-"""    
 
 # Drag floating layouts.
 mouse = [
