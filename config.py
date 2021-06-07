@@ -1,25 +1,20 @@
-from typing import List  # noqa: F401
-from libqtile import bar, layout, widget, hook
-from libqtile.config import Click, Drag, Group, Key, Screen
-from libqtile.lazy import lazy
 import os
+import re
+import socket
 import subprocess
+from libqtile.config import Key, Screen, Group, Drag, Click
+from libqtile.command import lazy
+from libqtile import layout, bar, widget, hook
+from typing import List  # noqa: F401
 
-mod = "mod4"
-terminal = "kitty"
-terminalapp ="kitty -e "
+##### DEFINING SOME VARIABLES #####
+mod = "mod4"                                     # Sets mod key to SUPER/WINDOWS
+myTerm = "alacritty"                                    # My terminal of choice
+myConfig = "/home/alejos17/.config/qtile/config.py"    # The Qtile config file location
 
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~/.config/qtile/startup_once.sh')
-    subprocess.call([home])
-@hook.subscribe.startup
-def autostart():
-    home = os.path.expanduser('~/.config/qtile/startup.sh')
-    subprocess.call([home])
-
+##### KEYBINDINGS #####
 keys = [
-    # Switch between windows
+    # Cambiar entre Ventanas
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
@@ -27,8 +22,8 @@ keys = [
     Key([mod], "space", lazy.layout.next(),
         desc="Move window focus to other window"),
 
-    # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
+    # Mover ventanas entre izq / der o mover arriba / abajo en el stack.
+    # Se se mueve fuera del rango se crea otra columna
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
         desc="Move window to the left"),
     Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
@@ -54,7 +49,7 @@ keys = [
     # multiple stack panes
     Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "Return", lazy.spawn(myTerm), desc="Launch terminal"),
 
     # Toggle between different layouts as defined below
     Key([mod], "a", lazy.next_layout(), desc="Toggle between layouts"),
@@ -84,8 +79,9 @@ keys = [
 
     Key([mod], "e", lazy.spawn("thunar")),
     Key([mod], "v", lazy.spawn("code")),
+    Key([mod], "t", lazy.spawn("telegram-desktop")),
     #Key([mod], "r", lazy.spawn(terminalapp + "ranger")),
-    #Key([mod], "s", lazy.spawn("passmenu")),
+    Key([mod], "s", lazy.spawn("passmenu")),
     #Key([mod], "n", lazy.spawn(terminalapp + "newsboat")),
     Key([mod], "w", lazy.spawn("google-chrome")),
     #Key([mod, "shift"], "w", lazy.spawn(terminalapp + "amfora")),
@@ -94,184 +90,319 @@ keys = [
     # Key([mod], "", lazy.spawn(""), desc=""),
 ]
 
-group_names = [("✎", {'layout': 'columns'}),
-               ("❞", {'layout': 'columns'}),
-               ("✺", {'layout': 'columns'}),
-               ("✀", {'layout': 'columns'}),
-               ("❏", {'layout': 'columns'}),
-               ("♫", {'layout': 'floating'}),
-               ("⛕", {'layout': 'columns'}),
-               ("☎", {'layout': 'columns'}),
-               ("☊", {'layout': 'columns'})]
+##### GROUPS #####
+group_names = [("WWW", {'layout': 'monadtall'}),
+               ("CONSOLE", {'layout': 'monadtall'}),
+               ("RDP", {'layout': 'treetab'}),
+               ("CODE", {'layout': 'monadtall'}),
+               ("CHAT", {'layout': 'monadtall'}),
+               ("MUS", {'layout': 'monadtall'}),
+               ("FILES", {'layout': 'monadtall'}),
+               ]
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
 
 for i, (name, kwargs) in enumerate(group_names, 1):
     keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
-    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name, switch_group=True))) # Send current window to another group
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
+	
 
-colors = [
-    "#1E1F29", # darker purple 
-    "#bfbfbf", # white
-    "#bd93f9", # lighter purple
-    "#ff92d0", # pink
-    "#50fa7b", # green 
-    "#ff6e67", # red
-	"#3A2F4D", # grey
-]
+##### DEFAULT THEME SETTINGS FOR LAYOUTS #####
+layout_theme = {"border_width": 2,
+                "margin": 4,
+                "border_focus": "AD69AF",
+                "border_normal": "1D2330"
+                }
 
+##### THE LAYOUTS #####
 layouts = [
-    layout.Columns(
-        border_focus_stack=[1],
-        border_focus=colors[2]
-    ),
     layout.Max(),
-    # Try more layouts by unleashing below layouts.
-    #layout.Stack(num_stacks=2),
-    #layout.Bsp(),
-    #layout.Matrix(),
-    #layout.MonadTall(),
-    #layout.MonadWide(),
-    #layout.RatioTile(),
-    #layout.Tile(),
-    #layout.TreeTab(),
-    #layout.VerticalTile(),
-    #layout.Zoomy(),
+    layout.Stack(num_stacks=2),
+	#layout.MonadWide(**layout_theme),
+    #layout.Bsp(**layout_theme),
+    #layout.Stack(stacks=2, **layout_theme),
+    #layout.Columns(**layout_theme),
+    #layout.RatioTile(**layout_theme),
+    #layout.VerticalTile(**layout_theme),
+    #layout.Tile(shift_windows=True, **layout_theme),
+    #layout.Matrix(**layout_theme),
+    #layout.Zoomy(**layout_theme),
+    layout.MonadTall(**layout_theme),
+    #layout.Max(**layout_theme),
+    layout.TreeTab(
+         font = "Ubuntu",
+         fontsize = 10,
+         sections = ["FIRST", "SECOND"],
+         section_fontsize = 11,
+         bg_color = "141414",
+         active_bg = "90C435",
+         active_fg = "000000",
+         inactive_bg = "384323",
+         inactive_fg = "a0a0a0",
+         padding_y = 5,
+         section_top = 10,
+         panel_width = 320
+         ),
+     layout.Floating(**layout_theme)
 ]
 
+##### COLORS #####
+colors = [["#282a36", "#282a36"], # panel background
+          ["#434758", "#434758"], # background for current screen tab
+          ["#ffffff", "#ffffff"], # font color for group names
+          ["#ff5555", "#ff5555"], # background color for layout widget
+          ["#A77AC4", "#A77AC4"], # dark green gradiant for other screen tabs
+          ["#7197E7", "#7197E7"]] # background color for pacman widget
+
+##### PROMPT #####
+prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
+	
+##### DEFAULT WIDGET SETTINGS #####
 widget_defaults = dict(
-    font='Ubuntu',
-    fontsize=28,
-    padding=5,
+    font="Ubuntu Mono",
+    fontsize = 12,
+    padding = 2,
+    background=colors[2]
 )
 extension_defaults = widget_defaults.copy()
 
-screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(
-                    font = "Ubuntu",
-                    fontsize = 28,
-                    margin_y = 3,
-                    margin_x = 0,
-                    padding_y = 5,
-                    padding_x = 3,
-                    borderwidth = 3,
-                    rounded = False,
-                    highlight_method = "line",
-                    this_current_screen_border = colors[4],
-                    active = colors[3],
-                    inactive = colors[2],
-                ),
-                widget.Spacer(
-                    length=15
-                ),
-		widget.Cmus(
-                    font='Ubuntu Mono',
-                    play_color=colors[4],
-                    noplay_color=colors[2],
-                    max_chars=45,
-                ),
-                widget.Spacer(),
-                widget.Clock(
-                    format="%H:%M - %a, %d %b",
-                    font="Accanthis ADF Std",
-                    fontsize="32",
-                    foreground=colors[1],
-		),
-                widget.Spacer(),
-                widget.CurrentLayout(
-                    fontsize=26,
-                    font="Linux Libertine",
-                    foreground=colors[3],
-		),
-		widget.BitcoinTicker(
-					fontsize=22,
-					font="Mononoki",
-					foreground=colors[1],
-					currency="EUR"
-				),
-		widget.Spacer(
-                    length=15
-                ),
-		widget.TextBox(
-                    fontsize=28,
-                    foreground=colors[2],
-                    text = "🎚️",
-                    padding = 0
-                ),
-		widget.PulseVolume(
-                    font="Linux Libertine",
-                    fontsize=26,
-                    foreground=colors[4]
-		),
-		widget.Spacer(
-                    length=15
-                ),
-		widget.TextBox(
-                    fontsize=26,
-                    text = "⚡",
-                    foreground=colors[2],
-                    padding = 0
-                ),
-		widget.Battery(
-                    battery=0+1,
-                    discharge_char='...',
-                    font="Linux Libertine",
-                    fontsize=24,
-                    foreground=colors[4],
-                    format="{percent:2.0%} {char}",
-		),
-		widget.Spacer(
-                    length=15
-                ),
-                widget.TextBox(
-                    fontsize=28,
-                    text = "🕸️",
-                    foreground=colors[2],
-                    padding = 0
-                ),
-                widget.Wlan(
-                    font="Linux Libertine",
-                    fontsize=30,
-                    interface="wlp4s0",
-                    format="{essid}",
-                    foreground=colors[3],
-                    disconnected_message="offline"
-		),
-                widget.Wlan(
-                    font="Linux Libertine",
-                    interface="wlp4s0",
-                    fontsize=26,
-                    format="{percent:2.0%}",
-                    foreground=colors[4],
-		),
-		widget.Spacer(
-                    length=2
-                ),
-                widget.Systray(),
-		widget.Spacer(
-                    length=10
-                ),
-                widget.QuickExit(
-                    fontsize=30,
-                    foreground=colors[5],
-                    countdown_start=4,
-                    countdown_format='{}',
-                    default_text="🐧"),
-                widget.Spacer(
-                    length=2
-                ),
-            ],
-            39,
-            background=colors[0],
-			opacity=0.75,
-        ),
-    ),
-]
+##### WIDGETS #####
 
-# Drag floating layouts.
+def init_widgets_list():
+    widgets_list = [
+               widget.Sep(
+                        linewidth = 0,
+                        padding = 6,
+                        foreground = colors[2],
+                        background = colors[0]
+                        ),
+               widget.GroupBox(font="Ubuntu Bold",
+                        fontsize = 9,
+                        margin_y = 0,
+                        margin_x = 0,
+                        padding_y = 5,
+                        padding_x = 5,
+                        borderwidth = 1,
+                        active = colors[2],
+                        inactive = colors[2],
+                        rounded = False,
+                        highlight_method = "block",
+                        this_current_screen_border = colors[4],
+                        this_screen_border = colors [1],
+                        other_current_screen_border = colors[0],
+                        other_screen_border = colors[0],
+                        foreground = colors[2],
+                        background = colors[0]
+                        ),
+               widget.Prompt(
+                        prompt=prompt,
+                        font="Ubuntu Mono",
+                        padding=10,
+                        foreground = colors[3],
+                        background = colors[1]
+                        ),
+               widget.Sep(
+                        linewidth = 0,
+                        padding = 10,
+                        foreground = colors[2],
+                        background = colors[0]
+                        ),
+               widget.WindowName(
+                        foreground = colors[4],
+                        background = colors[0],
+                        padding = 5
+                        ),
+               widget.TextBox(
+                        text=" 🖬",
+                        foreground=colors[2],
+                        background=colors[5],
+                        padding = 0,
+                        fontsize=14
+                        ),
+               widget.Memory(
+                        foreground = colors[2],
+                        background = colors[5],
+                        padding = 5
+                        ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        text=" ↯",
+                        foreground=colors[2],
+                        background=colors[5],
+                        padding = 0,
+                        fontsize=14
+                        ),
+               widget.Net(
+                        interface = "enp1s0",
+                        foreground = colors[2],
+                        background = colors[5],
+                        padding = 5
+                        ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        text=" 🔊",
+                        foreground=colors[2],
+                        background=colors[5],
+                        padding = 0,
+                        fontsize=14
+                        ),
+               widget.Volume(
+                        foreground = colors[2],
+                        background = colors[5],
+                        padding = 5
+                        ),
+		       widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        fontsize=14,
+                        text = "⚡",
+                        foreground=colors[5],
+                        padding = 0
+                        ),
+               widget.Battery(
+                        battery=0+1,
+                        discharge_char='...',
+                        fontsize=14,
+                        foreground=colors[5],
+                        format="{percent:2.0%} {char}",
+		                ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        fontsize=14,
+                        text = "🕸️",
+                        foreground=colors[5],
+                        padding = 0
+                        ),
+                widget.Wlan(
+                        fontsize=14,
+                        interface="wlp4s0",
+                        format="{essid}",
+                        foreground=colors[5],
+                        disconnected_message="offline"
+		                ),
+                widget.Wlan(
+                        interface="wlp4s0",
+                        fontsize=14,
+                        format="{percent:2.0%}",
+                        foreground=colors[5],
+		                ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        text=" ☵",
+                        padding = 5,
+                        foreground=colors[2],
+                        background=colors[5],
+                        fontsize=14
+                        ),
+               widget.CurrentLayout(
+                        foreground = colors[2],
+                        background = colors[5],
+                        padding = 5
+                        ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.TextBox(
+                        text=" 🕒",
+                        foreground=colors[2],
+                        background=colors[5],
+                        padding = 5,
+                        fontsize=14
+                        ),
+               widget.Clock(
+                        foreground = colors[2],
+                        background = colors[5],
+                        format="%A, %B %d - %H:%M:%S"
+                        ),
+               widget.TextBox(
+                        text='|',
+                        background = colors[2],
+                        foreground = colors[5],
+                        padding=0,
+                        fontsize=14
+                        ),
+               widget.QuickExit(
+                        fontsize=14,
+                        foreground=colors[5],
+                        countdown_start=4,
+                        countdown_format='{}',
+                        default_text="🐧"
+                        ),
+               widget.Sep(
+                        linewidth = 0,
+                        padding = 5,
+                        foreground = colors[2],
+                        background = colors[5]
+                        ),
+               widget.Systray(
+                        background=colors[5],
+                        padding = 5
+                        ),
+              ]
+    return widgets_list
+
+##### SCREENS ##### (TRIPLE MONITOR SETUP)
+
+def init_widgets_screen1():
+    widgets_screen1 = init_widgets_list()
+    return widgets_screen1                       # Slicing removes unwanted widgets on Monitors 1,3
+
+def init_widgets_screen2():
+    widgets_screen2 = init_widgets_list()
+    return widgets_screen2                       # Monitor 2 will display all widgets in widgets_list
+
+def init_screens():
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=0.95, size=20)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen2(), opacity=0.95, size=20)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=0.95, size=20))]
+
+if __name__ in ["config", "__main__"]:
+    screens = init_screens()
+    widgets_list = init_widgets_list()
+    widgets_screen1 = init_widgets_screen1()
+    widgets_screen2 = init_widgets_screen2()
+
+##### DRAG FLOATING WINDOWS #####
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(),
          start=lazy.window.get_position()),
@@ -282,12 +413,13 @@ mouse = [
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
-main = None  # WARNING: this is deprecated and will be removed soon
+main = None
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
+
+##### FLOATING WINDOWS #####
 floating_layout = layout.Floating(float_rules=[
-    # Run the utility of `xprop` to see the wm class and name of an X client.
     {'wmclass': 'confirm'},
     {'wmclass': 'dialog'},
     {'wmclass': 'download'},
@@ -306,16 +438,18 @@ floating_layout = layout.Floating(float_rules=[
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
-wmname = "LG3D"
+##### STARTUP APPLICATIONS #####
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser('~')
+    subprocess.call([home + '/.config/qtile/autostart.sh'])
 
-# Qtile startup commands, not repeated at qtile restart
-#@hook.subscribe.startup_once
-#def autostart():
-#    from datetime import datetime
-#    try:
-#        subprocess.call([home + '/.config/qtile/autostart.sh'])
-#    except Exception as e:
-#        with open('qtile_log', 'a+') as f:
-#            f.write(
-#                datetime.now().strftime('%Y-%m-%dT%H:%M') +
-#                + ' ' + str(e) + '\n')
+# XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
+# string besides java UI toolkits; you can see several discussions on the
+# mailing lists, GitHub issues, and other WM documentation that suggest setting
+# this string if your java app doesn't work correctly. We may as well just lie
+# and say that we're a working one by default.
+#
+# We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
+# java that happens to be on java's whitelist.
+wmname = "LG3D"
