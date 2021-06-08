@@ -77,7 +77,9 @@ keys = [
     Key([mod], "v", lazy.spawn("virtualbox")),
     Key([mod], "d", lazy.spawn("/bin/sh '/opt/jd2/JDownloader2'")),
     Key([mod], "n", lazy.spawn('"/usr/bin/nextcloud" --background')),
-    
+    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s /home/alejos17/Pictures")), #Generar Screenshots
+    Key([mod, "control"], "z", lazy.spawn('alacritty -e sudo reboot now')),  #Restart PC
+    Key([mod, "control"], "x", lazy.spawn('alacritty -e sudo shutdown now')),  #Turn Off PC
 ]
 
 __groups = {
@@ -209,13 +211,14 @@ screens = [
                     highlight_color=[color],
                     highlight_method="line",
                     spacing=0,
-                    inactive=color_light2,
-                    active=color,
+                    inactive=color_light,
+                    active=color_light2,
                     block_highlight_text_color="#ffffff",
                     borderwidth=0,
                     padding=10
                 ),
                 #widget.Prompt(),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.WindowName(foreground="#999999"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.Notify(fmt=" 🔥 {} "),
