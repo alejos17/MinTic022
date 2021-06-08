@@ -49,8 +49,8 @@ keys = [
     Key([mod, "control"], "r", lazy.restart(), desc="Restart qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown qtile"),
     Key([mod], "r", lazy.run_extension(extension.DmenuRun(
-        dmenu_prompt="Ejecuta",
-        dmenu_font="Cantarell-18",
+        dmenu_prompt="Ejecutar: ",
+        dmenu_font="Cantarell-14",
         background=back,
         foreground=color_light,
         selected_background=color,
@@ -82,12 +82,14 @@ keys = [
 
 __groups = {
     1: Group("TERMINAL", matches=[Match(wm_class=["alacritty"])]),
-    2: Group("WWW", matches=[Match(wm_class=["google-chrome"])]),
+    2: Group("WWW"),
     3: Group("DEV", matches=[Match(wm_class=["code"])]),
     4: Group("CHAT", matches=[Match(wm_class=["telegram-desktop"])]),
     5: Group("OTROS", matches=[Match(wm_class=["nextcloud"])]),
 }
 groups = [__groups[i] for i in __groups]
+
+
 
 
 def get_group_key(name):
@@ -158,6 +160,8 @@ screens = [
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.WindowName(foreground="#999999"),
                 widget.TextBox(text="|", foreground = color_light2),
+                widget.Notify(fmt=" 🔥 {} "),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.CheckUpdates(
                     custom_command="sudo apt update",
                     background="555555",
@@ -173,13 +177,16 @@ screens = [
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="** Alejandro - Pantalla Ppal **"),
                 widget.TextBox(text="|", foreground = color_light2),
+                widget.CPU(),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text=" 🖬"),
                 widget.Memory(),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🔊"),
-                widget.Volume(),
+                widget.Volume(volume_app="pavucontrol"),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.Clock(format='%A, %B %d-%m-%Y %H:%M:%S', padding=10),
+                widget.TextBox(text="🕒"),
+                widget.Clock(format='%A, %B %d-%m-%Y %H:%M:%S', padding=5),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.Systray(),
                 widget.Sep(linewidth = 0, padding = 5),
@@ -213,12 +220,15 @@ screens = [
                 #widget.Prompt(),
                 widget.WindowName(foreground="#999999"),
                 widget.TextBox(text="|", foreground = color_light2),
+                widget.Notify(fmt=" 🔥 {} "),
+                widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="** Alejandro - Pantalla 2 **"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🔊"),
-                widget.Volume(),
+                widget.Volume(volume_app="pavucontrol"),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.Clock(format='%H:%M:%S', padding=10),
+                widget.TextBox(text="🕒"),
+                widget.Clock(format='%H:%M:%S', padding=5),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.Sep(linewidth = 0, padding = 5),
             ],
