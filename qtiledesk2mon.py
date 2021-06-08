@@ -81,15 +81,15 @@ keys = [
 ]
 
 __groups = {
-    1: Group("TERMINAL", matches=[Match(wm_class=["alacritty"])]),
+    1: Group("CHROME"),
     2: Group("WWW"),
-    3: Group("DEV", matches=[Match(wm_class=["code"])]),
+    3: Group("VSCODE", matches=[Match(wm_class=["code"])]),
     4: Group("CHAT", matches=[Match(wm_class=["telegram-desktop"])]),
-    5: Group("OTROS", matches=[Match(wm_class=["nextcloud"])]),
+    5: Group("ARCHIVOS"),
+    6: Group("MUSIC"),
+    7: Group("OTROS", matches=[Match(wm_class=["nextcloud"])]),
 }
 groups = [__groups[i] for i in __groups]
-
-
 
 
 def get_group_key(name):
@@ -175,9 +175,7 @@ screens = [
                     restart_indicator="Restart!!"
                 ),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.TextBox(text="** Alejandro - Pantalla Ppal **"),
-                widget.TextBox(text="|", foreground = color_light2),
-                widget.CPU(),
+                widget.TextBox(text="alejos17-P1"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text=" 🖬"),
                 widget.Memory(),
@@ -186,7 +184,7 @@ screens = [
                 widget.Volume(volume_app="pavucontrol"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🕒"),
-                widget.Clock(format='%A, %B %d-%m-%Y %H:%M:%S', padding=5),
+                widget.Clock(format='%a, %d-%m-%y %H:%M', padding=5),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.Systray(),
                 widget.Sep(linewidth = 0, padding = 5),
@@ -222,13 +220,13 @@ screens = [
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.Notify(fmt=" 🔥 {} "),
                 widget.TextBox(text="|", foreground = color_light2),
-                widget.TextBox(text="** Alejandro - Pantalla 2 **"),
+                widget.TextBox(text="alejos17-P2"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🔊"),
                 widget.Volume(volume_app="pavucontrol"),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.TextBox(text="🕒"),
-                widget.Clock(format='%H:%M:%S', padding=5),
+                widget.Clock(format='%H:%M', padding=5),
                 widget.TextBox(text="|", foreground = color_light2),
                 widget.Sep(linewidth = 0, padding = 5),
             ],
