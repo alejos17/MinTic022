@@ -1,5 +1,4 @@
-﻿genero,nombre,apellido,direccion,ciudad,email,telefono,fecha_nac,edad,id,sangre,ts,th,th1,teb,td,tir,tvih,tc,tb,te,ta,to,tls,tpl,tp,tpol,tam,tre,tbc,tcr,tdc,tca,tba,tpt,tav,tec,etapa,fecha_cita,hora_cita,vacuna
-femenino,Nadelina,Galarza,TRANSV 10 # 4 - 82,Cali,NadelinaGalarzaJaquez@fleckens.hu,3115968716,1/6/1934,87,27907943,B-,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,30/05/2021,11:20,AstraZeneca
+﻿femenino,Nadelina,Galarza,TRANSV 10 # 4 - 82,Cali,NadelinaGalarzaJaquez@fleckens.hu,3115968716,1/6/1934,87,27907943,B-,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,30/05/2021,11:20,AstraZeneca
 femenino,Mara,Palomino,CLL 50 # 93 - 13,Cúcuta,MaraPalominoReyes@rhyta.com,3169875611,1/19/1970,51,66470558,O+,1,1,0,1,0,0,1,1,1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,10/06/2021,11:20,AstraZeneca
 femenino,Proserpina,Leal,CLL 5 # 45 - 90,Ibagué,ProserpinaLealPantoja@dayrep.com,3015616216,4/3/1945,76,71789742,B+,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,2,03/06/2021,10:20,AstraZeneca
 masculino,Quiliano,Lozada,DIAG 8 # 33 - 72,Villavicencio,QuilianoLozadaLomeli@armyspy.com,3145630607,12/28/1933,87,13067568,O+,0,0,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,03/06/2021,10:20,Pfizer

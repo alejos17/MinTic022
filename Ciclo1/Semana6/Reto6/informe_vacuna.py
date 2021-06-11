@@ -3,6 +3,7 @@
     Junio XX-XX """
 
 # Definición de Funciones (Dividir)
+#-*- coding: utf-8 -*-
 import csv
 from collections import namedtuple, Counter
 import matplotlib.pyplot as plt
@@ -15,200 +16,112 @@ pacientes=namedtuple('Pacientes',['genero','nombre','apellido','direccion','ciud
 lista_pacientes=[]
 
 def leer_archivo():
-    with open('/home/alejos17/Documents/code_alejos17/MinTic022/Ciclo1/Semana6/Reto6/Data1.csv') as File:
+    with open('/home/alejos17/Documents/code_alejos17/MinTic022/Ciclo1/Semana6/Reto6/Data1.csv',encoding='utf-8-sig') as File:
             reader = csv.reader(File)
             for row in reader:
                 p=pacientes(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19],row[20],row[21],row[22],row[23],row[24],row[25],row[26],row[27],row[28],row[29],row[30],row[31],row[32],row[33],row[34],row[35],row[36],row[37],row[38],row[39],row[40])
                 lista_pacientes.append(p)
+    File.close()
     return lista_pacientes
 
-#TODO ya lo hace grafico_general
-def grafico_etapas(lista_pacientes):
-    e1=[]
-    e2=[]
-    e3=[]
-    e4=[]
-    e5=[]
-    for x in range(len(lista_pacientes)):
-        if lista_pacientes[x].etapa=="1":
-            e1.append(lista_pacientes[x].etapa)
-        if lista_pacientes[x].etapa=="2":
-            e2.append(lista_pacientes[x].etapa)
-        if lista_pacientes[x].etapa=="3":
-            e3.append(lista_pacientes[x].etapa)
-        if lista_pacientes[x].etapa=="4":
-            e4.append(lista_pacientes[x].etapa)
-        if lista_pacientes[x].etapa=="5":
-            e5.append(lista_pacientes[x].etapa)        
-
-    fig = plt.figure(u'Gráfica de barras') # Figure
-    ax = fig.add_subplot(111) # Axes
-    nombres = ['Etapa 1','Etapa 2','Etapa 3','Etapa 4','Etapa 5']
-    datos = [len(e1),len(e2),len(e3),len(e4),len(e5)]
-    xx = range(len(datos))
-    ax.bar(xx, datos, width=0.8, align='center')
-    ax.set_xticks(xx)
-    ax.set_xticklabels(nombres)
-    plt.show()
-    return None
-
-#TODO BORRAR YA lo hace grafico_general
-def grafico_vacunas(lista_pacientes):
-    pfizer=[]
-    astra=[]
-    moderna=[]
-    sinovac=[]
-    for x in range(len(lista_pacientes)):
-        if lista_pacientes[x].vacuna=="Pfizer":
-            pfizer.append(lista_pacientes[x].vacuna)
-        if lista_pacientes[x].vacuna=="AstraZeneca":
-            astra.append(lista_pacientes[x].vacuna)
-        if lista_pacientes[x].vacuna=="Moderna":
-            moderna.append(lista_pacientes[x].vacuna)
-        if lista_pacientes[x].vacuna=="Sinovac":
-            sinovac.append(lista_pacientes[x].vacuna)
-        
-    fig = plt.figure(u'Gráfica de barras') # Figure
-    ax = fig.add_subplot(111) # Axes
-    nombres = ['Pfizer','AstraZeneca','Moderna','Sinovac']
-    datos = [len(pfizer),len(astra),len(moderna),len(sinovac)]
-    xx = range(len(datos))
-    ax.bar(xx, datos, width=0.8, align='center')
-    ax.set_xticks(xx)
-    ax.set_xticklabels(nombres)
-    plt.show()
-    return None
-
-def grafico_general(lista_pacientes):
+def menu_graficos(lista_pacientes):
+    print("=======================================")
+    print("++++++++++  Generar Grafico +++++++++++")
+    print("=======================================")
+    print("1. Grafico por Ciudad")
+    print("2. Grafico por Tipo de Vacuna")
+    print("3. Grafico por Etapa")
+    print("4. Grafico por Genero")
+    print("5. Grafico por Fecha de Vacunación")
+    print("6. Grafico por Hora de Vacunación")
+    print("---------------------------------------")
     a=int(input("Escriba la opcion: "))
-    if a==1:
-        b="ciudad"
-    elif a==2:
-        b="vacuna"
-    elif a==3:
-        b="etapa"    
+    if a==1: b="ciudad"
+    elif a==2: b="vacuna"
+    elif a==3: b="etapa"
+    elif a==4: b="genero"
+    elif a==5: b="fecha_cita"
+    elif a==6: b="hora_cita"
 
+    nombres,datos,dic=calculo_datos(lista_pacientes,b)
+    graficador(nombres,datos,b)
+    return None
+
+def calculo_datos(lista_pacientes,b):
     lista=[]
     for x in range(len(lista_pacientes)):
         lista.append(getattr(lista_pacientes[x], b))
         cantidad=Counter(lista)
-        
-    nombres=cantidad.keys()
-    datos=cantidad.values()
+
+    #Se ordena el diccionario generado por Counter de
+    #forma ascendente
+    cantidad_ord = dict(sorted(cantidad.items()))
+    nombres=cantidad_ord.keys()
+    datos=cantidad_ord.values()
     
-    print(cantidad)
-    print(len(cantidad))
-    print(nombres)
-    print(datos)
+    #print(cantidad)
+    #print("-----")
+    #print(cantidad_ord)
+    #print(len(cantidad))
+    #print(nombres)
+    #print(datos)
+    print(lista)
 
-    graficador(nombres,datos)
+    #graficador(nombres,datos,b)
+    return nombres,datos,cantidad_ord
 
-    return
-
-def graficador(nombres,datos):
+def graficador(nombres,datos,b):
+    #Grafica Horizontal
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    y_pos = np.arange(len(nombres))
+    error = np.random.rand(len(nombres))
+    ax.barh(y_pos, datos, xerr=error, align='center')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(nombres)
+    ax.invert_yaxis()  # labels read top-to-bottom
+    ax.set_xlabel('Cantidad de Personas')
+    ax.set_title('Grafica por '+b)
+    
+    """  Grafica Vertical
     fig = plt.figure(u'Gráfica de barras') # Figure
     ax = fig.add_subplot(111) # Axes
     xx = range(len(datos))
     ax.bar(xx, datos, width=0.8, align='center')
     ax.set_xticks(xx)
     ax.set_xticklabels(nombres)
+    """
     plt.show()
     return None
 
-
-
-
-#TODO Revisar si esto se puede utilizar.
-
 def listar_datos(lista_pacientes):
-    """ 
-    Parameters
-    ----------
-    lista_pacientes:NamedTuple
-        Lista con las tuplas por cada paciente
-    Return
-    -------
-        No retorna valores, imprime en pantalla del usuario
-    """
-    #Creación de listas por cada dato del paciente de nuevo para poder sacar estadisticas por cantidades
-    #Ya sea cantidad de personas, por tipo de vacunas
-    lid=[]  
-    lnombres=[]
-    lapellido=[]
-    letapa=[]
-    lfecha_nac=[]
-    ledad=[]
-    lfecha_cita=[]
-    lhora_cita=[]
-    lvacuna=[]
-    lvacunap=[]
-    lvacunaa=[]
-    lvacunam=[]
-    lvacunasi=[]
-    letapa1=[]
-    letapa2=[]
-    letapa3=[]
-    letapa4=[]
-    letapa5=[]
-    
-    #Ciclo para guardar datos de la lista de pacientes en listas independientes para conteo
-    for x in range(len(lista_pacientes)):
-        lid.append(lista_pacientes[x].id)
-        lnombres.append(lista_pacientes[x].nombre)
-        lapellido.append(lista_pacientes[x].apellido)
-        letapa.append(lista_pacientes[x].etapa)
-        lfecha_nac.append(lista_pacientes[x].fecha_nac)
-        ledad.append(lista_pacientes[x].edad)
-        lfecha_cita.append(lista_pacientes[x].fecha_cita)
-        lhora_cita.append(lista_pacientes[x].hora_cita)
-        lvacuna.append(lista_pacientes[x].vacuna)
-    
-    #Listar por marca de vacuna para desplegar información de vacunados por cada una de las 
-    #marca de vacuna
-    for x in range(len(lvacuna)):
-        if lvacuna[x]=="Pfizer":
-            lvacunap.append(lvacuna[x])
-        elif lvacuna[x]=="AstraZeneca":
-            lvacunaa.append(lvacuna[x])
-        elif lvacuna[x]=="Moderna":
-            lvacunam.append(lvacuna[x])
-        elif lvacuna[x]=="Sinovac":
-            lvacunasi.append(lvacuna[x])
+    print("=======================================")
+    print("+++++++++  Listado de Datos ++++++++++")
+    print("=======================================")
+    print("1. por Ciudad")
+    print("2. por Tipo de Vacuna")
+    print("3. por Etapa")
+    print("4. por Genero")
+    print("5. por Fecha de Vacunación")
+    print("6. por Hora de Vacunación")
+    print("---------------------------------------")
+    a=int(input("Escriba la opcion: "))
+    if a==1: b="ciudad"
+    elif a==2: b="vacuna"
+    elif a==3: b="etapa"
+    elif a==4: b="genero"
+    elif a==5: b="fecha_cita"
+    elif a==6: b="hora_cita"
 
-    #Listar por etapa de vacunación para desplegar información de vacunados
-    for x in range(len(letapa)):
-        if letapa[x]=="1":
-            letapa1.append(letapa[x])
-        elif letapa[x]=="2":
-            letapa2.append(letapa[x])
-        elif letapa[x]=="3":
-            letapa3.append(letapa[x])
-        elif letapa[x]=="4":
-            letapa4.append(letapa[x])
-        elif letapa[x]=="5":
-            letapa5.append(letapa[x])
-
-    for element in range(len(lista_pacientes)):
-        print(lista_pacientes[element])
-        print("-----------------------------------------")
-    
-    #Mensajes en Pantalla
-    print("\n")
-    print("Se tienen registrados: ",len(lista_pacientes),"pacientes\n")
-    print("Pesonas vacunadas con Pfizer: ",len(lvacunap))
-    print("Pesonas vacunadas con AstraZeneca: ",len(lvacunaa))
-    print("Pesonas vacunadas con Moderna: ",len(lvacunam))
-    print("Pesonas vacunadas con Sinovac: ",len(lvacunasi))
-    print("")
-    print("Personas Vacunadas de Etapa 1: ",len(letapa1))
-    print("Personas Vacunadas de Etapa 2: ",len(letapa2))
-    print("Personas Vacunadas de Etapa 3: ",len(letapa3))
-    print("Personas Vacunadas de Etapa 4: ",len(letapa4))
-    print("Personas Vacunadas de Etapa 5: ",len(letapa5))
-    print("\n")
-    
+    nombres,datos,dic=calculo_datos(lista_pacientes,b)
+    dic2=dic.items()
+    print("---------------------------------------")
+    print("++++ Lista por ",b," ++++")
+    print("| ",b," | Cantidad de personas |")
+    print("---------------------------------------")
+    for elemento in dic2:
+        print(elemento)
     return
-
 
 def busqueda(lista_pacientes):
     """ 
