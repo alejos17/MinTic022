@@ -67,7 +67,7 @@ def graficos_gral(lista_pacientes):
         print("2. Tipo de Vacuna")
         print("3. Etapa")
         print("4. Genero")
-        print("5. Tipo de Sanguineo")
+        print("5. Tipo Sanguineo")
         print("6. Grafico por Fecha de Vacunación")
         print("7. Grafico por Hora de Vacunación")
         print("8. Volver Atrás")
