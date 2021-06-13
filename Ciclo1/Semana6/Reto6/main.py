@@ -1,16 +1,15 @@
 """ Reto 6 Informes de Vacunacion
     incorpora al modulo informe_vacuna.py
-    Tu nombre aquí
-    Junio XX-XX """
+    Alejandro Tamayo
+    Junio 13-2021 """
 
 #---------------- Zona librerias------------
 import informe_vacuna as iv
 #======================================================================
 #          E S P A C I O    D E    T R A B A J O     A L U M N O
 # ====================================================================
-
-
 #----------Definición de Funciones (Dividir)------------
+#IV_06_RS_01
 def menu():
     print("\n")
     print("=======================================================")
@@ -20,8 +19,7 @@ def menu():
     print("2. Graficos Generales")
     print("3. Graficos Específicos")
     print("4. Listar Datos")
-    print("5. Grafico General")
-    print("6. Salir")
+    print("5. Salir")
     print(" ")
     op=int(input("Seleccione una opcion:  "))
     return op
@@ -35,7 +33,6 @@ while flag==1:
     elif op==3: iv.graficos_esp(lista_pacientes)
     elif op==4: iv.listar_datos(lista_pacientes)
     elif op==5: exit()
-    elif op==6: exit()
     else: print("Opción no válida, intente de nuevo")
 
 #======================================================================
