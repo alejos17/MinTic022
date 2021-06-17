@@ -45,25 +45,33 @@ def graficador(datos):
     #conteo_dep_recu.set_title("Deparmentos con numero de Recuperados")
 
     #Positivos por Sexo por departamentos
-    dep_sex_cont = datos.groupby(['departamento_nom','recuperado'])
-    z=dep_sex_cont.mean()
+    #dep_sex_cont = datos.groupby(['departamento_nom','recuperado'])
+    #z=dep_sex_cont.mean()
+    
+    #Cantidad de hombre y mujeres para generar porcentaje del total y graficar torta
+    freq = datos.groupby(['sexo']).count()
+    h = datos.sexo.value_counts()
+    m = datos.sexo.value_counts()
 
     #Conteo simple de una sola columna del dataframe o serie
     #a=datos.departamento_nom.value_counts()
     #b=pd.unique(datos['ciudad_municipio_nom'])
     #plt.barh(a.index, a)
 
-    #print(a)
+    print(freq)
+    print("------------------------------")
+    print(h)
+    print(m)
     #print(type(a))
     print("------------------------------")
     #print(b)
     #print(type(b))
     print("------------------------------")
-    print(dep_sex_cont)
-    print(type(dep_sex_cont))
+    #print(dep_sex_cont)
+    #print(type(dep_sex_cont))
     print("------------------------------")
-    print(z)
-    print(type(z))
+    #print(z)
+    #print(type(z))
     #ax=datos.departamento_nom.value_counts().plot(kind='barh')
     #ax.invert_yaxis()
     #ax.set_xlabel('Cantidad de Personas') #Titulo del eje X
