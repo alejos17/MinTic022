@@ -50,8 +50,7 @@ def graficador(datos):
     
     #Cantidad de hombre y mujeres para generar porcentaje del total y graficar torta
     freq = datos.groupby(['sexo']).count()
-    h = datos.sexo.value_counts()
-    m = datos.sexo.value_counts()
+    plt.barh(freq.index, freq)
 
     #Conteo simple de una sola columna del dataframe o serie
     #a=datos.departamento_nom.value_counts()
@@ -60,8 +59,6 @@ def graficador(datos):
 
     print(freq)
     print("------------------------------")
-    print(h)
-    print(m)
     #print(type(a))
     print("------------------------------")
     #print(b)
