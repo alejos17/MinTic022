@@ -7,6 +7,7 @@
 #          E S P A C I O    D E    T R A B A J O     A L U M N O
 # =====================================================================
 #Traer datos reales para graficas de covid-19 en Colombia
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from  sodapy import Socrata
@@ -45,19 +46,35 @@ def graficador(datos):
     #conteo_dep_recu.set_title("Deparmentos con numero de Recuperados")
 
     #Positivos por Sexo por departamentos
-    #dep_sex_cont = datos.groupby(['departamento_nom','recuperado'])
-    #z=dep_sex_cont.mean()
+    q = input("Filtrar por M o F: " )  #Preguntar u opciòn de sexo
+    #se crea un filtro de los datos se sexo segùn q y se agrupa los departamentos o cualquier otro
+    #y se realiza un conteo de departamento, para que solo aparezca 1 departamento con el 
+    #resto de datos contados por cada uno de ellos
+    filtro = datos[datos.sexo.str.match(q)].groupby("departamento_nom").count()
+    print(filtro)
+    print(type(filtro))
+    print(filtro.columns)
+    #para graficar se generan 2 listas una con los datos contados
+    #la otra con los nombres de los departamentos que son los indices.
+    listay = filtro['sexo'].tolist()  #se pueden escribir de las 2 formas
+    listax = filtro.index.tolist()    # o asi .......
+    print("-----------------------------")
+    
+    #grafica de barras horizontal de la lista.
+    plt.barh(listax, listay)
     
     #Cantidad de hombre y mujeres para generar porcentaje del total y graficar torta
-    freq = datos.groupby(['sexo']).count()
-    plt.barh(freq.index, freq)
+    #freq = datos.groupby(['sexo']).count()
+    #plt.barh(freq.index, freq)
+    
+
 
     #Conteo simple de una sola columna del dataframe o serie
     #a=datos.departamento_nom.value_counts()
     #b=pd.unique(datos['ciudad_municipio_nom'])
     #plt.barh(a.index, a)
 
-    print(freq)
+    
     print("------------------------------")
     #print(type(a))
     print("------------------------------")
