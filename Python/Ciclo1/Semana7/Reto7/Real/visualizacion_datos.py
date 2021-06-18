@@ -9,6 +9,7 @@
 #Traer datos reales para graficas de covid-19 en Colombia
 import numpy as np
 import pandas as pd
+from datetime import datetime
 import matplotlib.pyplot as plt
 from  sodapy import Socrata
 
@@ -17,7 +18,7 @@ def importar_datos():
     client = Socrata("www.datos.gov.co", None)
 
     #Trae las primeras 20.000 filas y crea un diccionario
-    tabla = client.get("gt2j-8ykr", limit=2000)
+    tabla = client.get("gt2j-8ykr", limit=20000)
 
     #Pasar los datos a un Dataframe
     df_tabla = pd.DataFrame.from_records(tabla)
@@ -44,7 +45,7 @@ def graficador(datos):
     #conteo_dep_recu = datos.groupby('departamento_nom')['recuperado'].count().plot(kind='barh')
     #conteo_dep_recu.set_xlabel("Personas")
     #conteo_dep_recu.set_title("Deparmentos con numero de Recuperados")
-
+    """
     #Positivos por Sexo por departamentos
     q = input("Filtrar por M o F: " )  #Preguntar u opciòn de sexo
     #se crea un filtro de los datos se sexo segùn q y se agrupa los departamentos o cualquier otro
@@ -59,13 +60,27 @@ def graficador(datos):
     listay = filtro['sexo'].tolist()  #se pueden escribir de las 2 formas
     listax = filtro.index.tolist()    # o asi .......
     print("-----------------------------")
-    
+  
     #grafica de barras horizontal de la lista.
     plt.barh(listax, listay)
-    
+    """
     #Cantidad de hombre y mujeres para generar porcentaje del total y graficar torta
     #freq = datos.groupby(['sexo']).count()
     #plt.barh(freq.index, freq)
+
+    #Grafico por fecha de contagio
+    #fecha_inicio_sintomas
+    #a=datos.fecha_inicio_sintomas.value_counts()
+    #plt.bar(a.index, a)
+    
+    #Fecha de muerte
+    a=datos.fecha_muerte.value_counts()
+    b=datetime.strptime(datos['fecha_muerte'].tolist())
+
+    print(a)
+    print("------------------------------")
+    print(b)
+    #plt.bar(a.index, a)
     
 
 
