@@ -55,8 +55,8 @@ def graficos_menu(datos):
         print("=======================================")
         print("++++++++++  Generar Grafico +++++++++++")
         print("=======================================")
-        print("1. Departamento")
-        print("2. Contagios")
+        print("1. Historico")
+        print("2. Vacunación")
         print("3. Muertes")
         print("4. Genero")
         #print("5. ")
@@ -66,41 +66,16 @@ def graficos_menu(datos):
         print("---------------------------------------")
         a=int(input("Escriba la opcion: "))
         #Según lo seleccionado por el usuario, se carga en la variable b el dato que se requiere graficar
-        if a==1: b="nombre_departamento"
-        elif a==2: b="fecha_de_inicio_de_sintomas"
+        if a==1: grafico_historico(datos)
+        elif a==2: grafico_vacunas(datos)
         elif a==3: b="etapa"        
         elif a==4: b="genero"
-        elif a==5: b="sangre"
-        elif a==6: b="fecha_cita"
-        elif a==7: b="hora_cita"
         elif a==8: break
         else: print("Opción no válida, intente de nuevo")
-        
-        #Se envia la lista de pacientes y la variable b a "calculo_datos" para sacar la información en
-        #relación a "b" solamente y devuelve:  nombres: descripción de los valores  y datos: los
-        #valores en si en forma de entero para el tamaño de las barras de la grafica
-        #"dic" no se usa en esta funcion, solo el listar_datos()
-        a=getattr(datos, b).value_counts()
-        a=a.reset_index(name='A')
-        a["index"]=pd.to_datetime(a["index"])
-        a=a.sort_values(["index"])
-
-        print(a)
-        print(type(a))
-        grafico_tendencia(a)
-        #Si la opción selecciona es por "Etapa", se agrega a los nombres para graficar la palabra
-        #"Etapa", ya que en la tabla el valor es 1 o 2 o 3 etc.  Esto es solamente estetico al 
-        #momento de gráficar.
-        #if a==3:
-        #    for x in range(len(nombres)):
-        #        nombres[x]=b+" "+str(nombres[x])
-        
-        #Se envian los datos devueltos por "calculo_datos" a la función graficador para desplegar
-        #la imagen en pantalla.
-        #graficador(a)
+                
     return None
 
-def grafico_tendencia(a):
+def grafico_historico(a):
     Y = a.iloc[0:,4].values # confirmados diarios
     #R = data.iloc[61:,3].values # recuperados diarios
     D = a.iloc[0:,7].values # difuntos diarios
@@ -126,6 +101,38 @@ def grafico_tendencia(a):
   
     ax.plot(X,Y,color='#1F77B4',linewidth=1,label='Contagios')
     ax.plot(X,D,color='#b4331f',linewidth=1,label='Muertes')
+    plt.legend()
+
+    plt.show()
+    return None
+
+def grafico_vacunas(a):
+    Y = a.iloc[0:,35].values # Personas Vacunadas
+    R = a.iloc[0:,36].values # Segundas Dosis
+    D = a.iloc[0:,34].values # Total de Vacunas
+    X = a.iloc[0:,3] # fecha
+    
+    plt.figure() 
+    ax = plt.axes()
+    ax.grid(linewidth=0.2, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
+    ax.set_facecolor("black") # FONDO DEL COLOR DEL GRAFICO
+    #ax.set_xlabel('\nFecha',size=12,color='#4bb4f2')
+    #ax.set_ylabel('Casos Confirmados\n',
+              #size=25,color='#4bb4f2')
+
+    plt.xticks(rotation='vertical',size='20',color='white') # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
+    plt.yticks(size=20,color='white')
+    plt.tick_params(size=20,color='white')
+  
+    #for i,j in zip(X,Y):
+    #    ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
+    
+    plt.title("Vacunación COVID-19 en Colombia\n",
+          size=30,color='#28a9ff')
+  
+    ax.plot(X,Y,color='#dd42f5',linewidth=1,label='Primera Dosis')
+    ax.plot(X,D,color='#42f5ec',linewidth=1,label='Total de Vacunas')
+    ax.plot(X,R,color='#42f587',linewidth=1,label='Segunda Dosis')
     plt.legend()
 
     plt.show()
