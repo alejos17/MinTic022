@@ -13,124 +13,136 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from  sodapy import Socrata
 
-def importar_datos():
-    #Acceso al servidor con datos publicos
-    client = Socrata("www.datos.gov.co", None)
-
-    #Trae las primeras 20.000 filas y crea un diccionario
-    tabla = client.get("gt2j-8ykr", limit=20000)
-
-    #Pasar los datos a un Dataframe
-    df_tabla = pd.DataFrame.from_records(tabla)
-
-    return df_tabla
-
-#IV_06_RV_07
-def graficador(datos):
+#IV_06_RS_02
+def leer_archivo():
     """ 
     Parameters
     ----------
-    nombres, datos, b: lista, lista, string
-        Entra la lista con nombres y el conteo en datos con un valor string para
-        poner el titulo de la gráfica
+    Returns
+    -------
+    lista_pacientes: Lista de Tuplas
+        Lista de tuplas namedtuples tipo Pacientes, con los datos de cada paciente
+    """
+    datos = pd.read_csv("/home/alejos17/Documentos/code_alejos17/MinTic022/Python/Ciclo1/Semana7/Reto7/Real/peq.csv")
+    #Mensaje al usuario
+    print("*************************************************************")
+    print("Archivo .csv cargado")
+    print("*************************************************************")
+    return datos
+
+def importar_datos():
+    #Acceso al servidor con datos publicos
+    client = Socrata("www.datos.gov.co", None)
+    #Trae las primeras 20.000 filas y crea un diccionario
+    tabla = client.get("gt2j-8ykr", limit=2000)
+    #Pasar los datos a un Dataframe
+    datos = pd.DataFrame.from_records(tabla)
+    return datos
+
+#IV_06_RS_03
+def graficos_menu(datos):
+    """ 
+    Parameters
+    ----------
+    lista_pacientes: Lista de Tuplas
+        Información de los pacientes 
     Returns
     -------
         Imprime en Pantalla la gráfica solicitada
-        Para pocas opciones de datos, se utiliza grafica de barras vertical.
-        Para muchas opciones de datos, como ciudades, se usa grafica de barra horizontal.
     """
-    plt.style.use('seaborn')  #Aplicar estilo de gráfica de matplotlib.org
-    
-    #Agrupar el filtro, en este caso ..  numero de recuperados por departamento
-    #conteo_dep_recu = datos.groupby('departamento_nom')['recuperado'].count().plot(kind='barh')
-    #conteo_dep_recu.set_xlabel("Personas")
-    #conteo_dep_recu.set_title("Deparmentos con numero de Recuperados")
-    """
-    #Positivos por Sexo por departamentos
-    q = input("Filtrar por M o F: " )  #Preguntar u opciòn de sexo
-    #se crea un filtro de los datos se sexo segùn q y se agrupa los departamentos o cualquier otro
-    #y se realiza un conteo de departamento, para que solo aparezca 1 departamento con el 
-    #resto de datos contados por cada uno de ellos
-    filtro = datos[datos.sexo.str.match(q)].groupby("departamento_nom").count()
-    print(filtro)
-    print(type(filtro))
-    print(filtro.columns)
-    #para graficar se generan 2 listas una con los datos contados
-    #la otra con los nombres de los departamentos que son los indices.
-    listay = filtro['sexo'].tolist()  #se pueden escribir de las 2 formas
-    listax = filtro.index.tolist()    # o asi .......
-    print("-----------------------------")
+    flag=1 #Bandera para entrar en Bucle del menú
+    while flag==1:
+        print("=======================================")
+        print("++++++++++  Generar Grafico +++++++++++")
+        print("=======================================")
+        print("1. Departamento")
+        print("2. Contagios")
+        print("3. Muertes")
+        print("4. Genero")
+        #print("5. ")
+        #print("6. Grafico por Fecha de Vacunación")
+        #print("7. Grafico por Hora de Vacunación")
+        print("8. Volver Atrás")
+        print("---------------------------------------")
+        a=int(input("Escriba la opcion: "))
+        #Según lo seleccionado por el usuario, se carga en la variable b el dato que se requiere graficar
+        if a==1: b="nombre_departamento"
+        elif a==2: b="fecha_de_inicio_de_sintomas"
+        elif a==3: b="etapa"        
+        elif a==4: b="genero"
+        elif a==5: b="sangre"
+        elif a==6: b="fecha_cita"
+        elif a==7: b="hora_cita"
+        elif a==8: break
+        else: print("Opción no válida, intente de nuevo")
+        
+        #Se envia la lista de pacientes y la variable b a "calculo_datos" para sacar la información en
+        #relación a "b" solamente y devuelve:  nombres: descripción de los valores  y datos: los
+        #valores en si en forma de entero para el tamaño de las barras de la grafica
+        #"dic" no se usa en esta funcion, solo el listar_datos()
+        a=getattr(datos, b).value_counts()
+        a=a.reset_index(name='A')
+        a["index"]=pd.to_datetime(a["index"])
+        a=a.sort_values(["index"])
+
+        print(a)
+        print(type(a))
+        grafico_tendencia(a)
+        #Si la opción selecciona es por "Etapa", se agrega a los nombres para graficar la palabra
+        #"Etapa", ya que en la tabla el valor es 1 o 2 o 3 etc.  Esto es solamente estetico al 
+        #momento de gráficar.
+        #if a==3:
+        #    for x in range(len(nombres)):
+        #        nombres[x]=b+" "+str(nombres[x])
+        
+        #Se envian los datos devueltos por "calculo_datos" a la función graficador para desplegar
+        #la imagen en pantalla.
+        #graficador(a)
+    return None
+
+def grafico_tendencia(a):
+    Y = a.iloc[0:,1].values # confirmados diarios
+    #R = data.iloc[61:,3].values # recuperados diarios
+    #D = data.iloc[61:,5].values # difuntos diarios
+    X = a.iloc[0:,0] # fecha
+    #plt.plot(X,Y)
+
+    plt.figure(figsize=(25,8)) 
   
-    #grafica de barras horizontal de la lista.
-    plt.barh(listax, listay)
-    """
-    #Cantidad de hombre y mujeres para generar porcentaje del total y graficar torta
-    #freq = datos.groupby(['sexo']).count()
-    #plt.barh(freq.index, freq)
+    ax = plt.axes()
+    ax.grid(linewidth=0.4, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
+  
+    ax.set_facecolor("black") # FONDO DEL COLOR DEL GRAFICO
+    ax.set_xlabel('\nDate',size=25,color='#4bb4f2')
+    ax.set_ylabel('Number of Confirmed Cases\n',
+              size=25,color='#4bb4f2')
 
-    #Grafico por fecha de contagio
-    #fecha_inicio_sintomas
-    #a=datos.fecha_inicio_sintomas.value_counts()
-    #plt.bar(a.index, a)
-    
-    #Fecha de muerte
-    a=datos.fecha_muerte.value_counts()
-    b=datetime.strptime(datos['fecha_muerte'].tolist())
+    plt.xticks(rotation='vertical',size='20',color='white') # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
+    plt.yticks(size=20,color='white')
+    plt.tick_params(size=20,color='white')
+  
+    for i,j in zip(X,Y):
+        ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
+      
+    ax.annotate('Second Lockdown 15th April',
+            xy=(15.2, 860),
+            xytext=(19.9,500),
+            color='white',
+            size='25',
+            arrowprops=dict(color='white',
+                            linewidth=0.025)) # FUNCION PARA GENERAR LA FLECHA DE UN PUNTO EN EL PLANO
+  
+    plt.title("COVID-19 IN : Daily Confrimed\n",
+          size=50,color='#28a9ff')
+  
+    ax.plot(X,Y,
+        color='#1F77B4',
+        marker='o',
+        linewidth=4,
+        markersize=15,
+        markeredgecolor='#035E9B')
 
-    print(a)
-    print("------------------------------")
-    print(b)
-    #plt.bar(a.index, a)
-    
-
-
-    #Conteo simple de una sola columna del dataframe o serie
-    #a=datos.departamento_nom.value_counts()
-    #b=pd.unique(datos['ciudad_municipio_nom'])
-    #plt.barh(a.index, a)
-
-    
-    print("------------------------------")
-    #print(type(a))
-    print("------------------------------")
-    #print(b)
-    #print(type(b))
-    print("------------------------------")
-    #print(dep_sex_cont)
-    #print(type(dep_sex_cont))
-    print("------------------------------")
-    #print(z)
-    #print(type(z))
-    #ax=datos.departamento_nom.value_counts().plot(kind='barh')
-    #ax.invert_yaxis()
-    #ax.set_xlabel('Cantidad de Personas') #Titulo del eje X
-    #ax.set_title('Graficas') # Titulo de la grafica
-    
-    
-    #print(x_values)
-    #print("---------------------------")
-    #print(y_values)
-    """
-    #Grafica Vertical para etapa, vacuna y genero, pocos datos
-    #Sacado de: https://matplotlib.org/stable/gallery/lines_bars_and_markers/categorical_variables.html#sphx-glr-gallery-lines-bars-and-markers-categorical-variables-py
-    fig, ax = plt.subplots() #Llamando Figura y Ejes
-    x_pos = range(len(x_values))  # Valores del eje X, la cantidad de datos encontrados
-    ax.bar(x_pos, y_values, align='center') #Barra vertical centradas: cantidad barras, valores, alineación.
-    ax.set_xticks(x_pos)  #Asignar valores a las posiciones en eje X
-    ax.set_xticklabels("Departamentos") 
-    ax.set_ylabel('Cantidad de Personas') #Titulo del eje y
-    ax.set_title('Grafica')  #Titulo de la gráfica
-    #Grafica Horizontal para mostrar bien cuando son muchos datos
-    #sacado de: https://matplotlib.org/stable/gallery/https://matplotlib.org/stable/gallery/lines_bars_and_markers/categorical_variables.html#sphx-glr-gallery-lines-bars-and-markers-categorical-variables-pylines_bars_and_markers/barh.html#sphx-glr-gallery-lines-bars-and-markers-barh-py
-    fig, ax = plt.subplots() #Llamando Figura y Eje
-    y_pos = range(len(x_values)) #Valores del eje Y, cantidad de datos encontrados
-    ax.barh(y_pos, y_values, align='center') #Barra horizontal centradas: cantidad de barras, valores, alineación.
-    ax.set_yticks(y_pos) #Asignar valores a las posiciones en eje Y
-    ax.set_yticklabels(x_values)
-    ax.set_xlabel('Cantidad de Personas') #Titulo del eje X
-    ax.set_title('Grafica por '+b) # Titulo de la grafica
-    """            
-    plt.show()  #Imprimir grafico seleccionado en pantalla
+    plt.show()
     return None
 
 #======================================================================
