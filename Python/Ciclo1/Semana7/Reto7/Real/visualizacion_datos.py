@@ -23,7 +23,7 @@ def leer_archivo():
     lista_pacientes: Lista de Tuplas
         Lista de tuplas namedtuples tipo Pacientes, con los datos de cada paciente
     """
-    datos = pd.read_csv("/home/alejos17/Documentos/code_alejos17/MinTic022/Python/Ciclo1/Semana7/Reto7/Real/peq.csv")
+    datos = pd.read_csv("/home/alejos17/Documentos/code_alejos17/MinTic022/Python/Ciclo1/Semana7/Reto7/Real/col.csv")
     #Mensaje al usuario
     print("*************************************************************")
     print("Archivo .csv cargado")
@@ -101,46 +101,32 @@ def graficos_menu(datos):
     return None
 
 def grafico_tendencia(a):
-    Y = a.iloc[0:,1].values # confirmados diarios
+    Y = a.iloc[0:,4].values # confirmados diarios
     #R = data.iloc[61:,3].values # recuperados diarios
-    #D = data.iloc[61:,5].values # difuntos diarios
-    X = a.iloc[0:,0] # fecha
-    #plt.plot(X,Y)
-
-    plt.figure(figsize=(25,8)) 
-  
+    D = a.iloc[0:,7].values # difuntos diarios
+    X = a.iloc[0:,3] # fecha
+    
+    plt.figure() 
     ax = plt.axes()
-    ax.grid(linewidth=0.4, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
-  
+    ax.grid(linewidth=0.2, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
     ax.set_facecolor("black") # FONDO DEL COLOR DEL GRAFICO
-    ax.set_xlabel('\nDate',size=25,color='#4bb4f2')
-    ax.set_ylabel('Number of Confirmed Cases\n',
+    ax.set_xlabel('\nFecha',size=12,color='#4bb4f2')
+    ax.set_ylabel('Casos Confirmados\n',
               size=25,color='#4bb4f2')
 
     plt.xticks(rotation='vertical',size='20',color='white') # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
     plt.yticks(size=20,color='white')
     plt.tick_params(size=20,color='white')
   
-    for i,j in zip(X,Y):
-        ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
-      
-    ax.annotate('Second Lockdown 15th April',
-            xy=(15.2, 860),
-            xytext=(19.9,500),
-            color='white',
-            size='25',
-            arrowprops=dict(color='white',
-                            linewidth=0.025)) # FUNCION PARA GENERAR LA FLECHA DE UN PUNTO EN EL PLANO
+    #for i,j in zip(X,Y):
+    #    ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
+    
+    plt.title("Historico COVID-19 en Colombia\n",
+          size=30,color='#28a9ff')
   
-    plt.title("COVID-19 IN : Daily Confrimed\n",
-          size=50,color='#28a9ff')
-  
-    ax.plot(X,Y,
-        color='#1F77B4',
-        marker='o',
-        linewidth=4,
-        markersize=15,
-        markeredgecolor='#035E9B')
+    ax.plot(X,Y,color='#1F77B4',linewidth=1,label='Contagios')
+    ax.plot(X,D,color='#b4331f',linewidth=1,label='Muertes')
+    plt.legend()
 
     plt.show()
     return None

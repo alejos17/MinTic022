@@ -34,8 +34,10 @@ while flag==1:
     op=menu()
     if op==1: 
         datos = vd.leer_archivo()
+        print(datos)
+        print(type(datos))
     elif op==2: exit()
-    elif op==3: vd.graficos_menu(datos)
+    elif op==3: vd.grafico_tendencia(datos)
     elif op==4: exit()
     else: print("Opción no válida, intente de nuevo")
 
