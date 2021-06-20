@@ -107,22 +107,20 @@ def grafico_historico(a):
     return None
 
 def grafico_vacunas(a):
+    plt.style.use('seaborn')
     Y = a.iloc[0:,35].values # Personas Vacunadas
     R = a.iloc[0:,36].values # Segundas Dosis
     D = a.iloc[0:,34].values # Total de Vacunas
     X = a.iloc[0:,3] # fecha
     
     plt.figure() 
-    ax = plt.axes()
-    ax.grid(linewidth=0.2, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
-    ax.set_facecolor("black") # FONDO DEL COLOR DEL GRAFICO
-    #ax.set_xlabel('\nFecha',size=12,color='#4bb4f2')
-    #ax.set_ylabel('Casos Confirmados\n',
-              #size=25,color='#4bb4f2')
+    ax = plt.axes()  #Defino la grafica
+    #ax.grid(linewidth=0.2, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
+    ax.set_ylabel('Millones de Dosis\n',size=25,color='#4bb4f2')
 
-    plt.xticks(rotation='vertical',size='20',color='white') # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
-    plt.yticks(size=20,color='white')
-    plt.tick_params(size=20,color='white')
+    plt.xticks(rotation='vertical',size=8) # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
+    plt.yticks(size=8)
+    #plt.tick_params(size=20,color='white')
   
     #for i,j in zip(X,Y):
     #    ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
@@ -130,9 +128,9 @@ def grafico_vacunas(a):
     plt.title("Vacunación COVID-19 en Colombia\n",
           size=30,color='#28a9ff')
   
-    ax.plot(X,Y,color='#dd42f5',linewidth=1,label='Primera Dosis')
-    ax.plot(X,D,color='#42f5ec',linewidth=1,label='Total de Vacunas')
-    ax.plot(X,R,color='#42f587',linewidth=1,label='Segunda Dosis')
+    ax.plot(X,D,color='#42f5ec',linewidth=2,label='Total de Vacunas')
+    ax.plot(X,Y,color='#dd42f5',linewidth=2,label='Primera Dosis')
+    ax.plot(X,R,color='#42f587',linewidth=2,label='Segunda Dosis')
     plt.legend()
 
     plt.show()
