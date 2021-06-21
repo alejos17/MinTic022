@@ -1,27 +1,22 @@
 """ Reto 7 Informes de Vacunacion #
-    Tu nombre aquí
-    Junio XX-XX """
+    Alejandro Tamayo
+    Junio 21-2021 """
 
 # Definición de Funciones (Dividir)
 #======================================================================
 #          E S P A C I O    D E    T R A B A J O     A L U M N O
 # =====================================================================
-#Traer datos reales para graficas de covid-19 en Colombia
-import numpy as np
 import pandas as pd
-from datetime import datetime
 import matplotlib.pyplot as plt
-from  sodapy import Socrata
 
-#IV_06_RS_02
+#IV_07_RS_02
 def leer_archivo():
     """ 
     Parameters
     ----------
     Returns
     -------
-    lista_pacientes: Lista de Tuplas
-        Lista de tuplas namedtuples tipo Pacientes, con los datos de cada paciente
+    datos: Dataframe con los datos 
     """
     datos = pd.read_csv("/home/alejos17/Documentos/code_alejos17/MinTic022/Python/Ciclo1/Semana7/Reto7/Real/col.csv")
     #Mensaje al usuario
@@ -30,22 +25,12 @@ def leer_archivo():
     print("*************************************************************")
     return datos
 
-def importar_datos():
-    #Acceso al servidor con datos publicos
-    client = Socrata("www.datos.gov.co", None)
-    #Trae las primeras 20.000 filas y crea un diccionario
-    tabla = client.get("gt2j-8ykr", limit=2000)
-    #Pasar los datos a un Dataframe
-    datos = pd.DataFrame.from_records(tabla)
-    return datos
-
-#IV_06_RS_03
+#IV_07_RS_03
 def graficos_menu(datos):
     """ 
     Parameters
     ----------
-    lista_pacientes: Lista de Tuplas
-        Información de los pacientes 
+    datos: Dataframe con datos del Covid
     Returns
     -------
         Imprime en Pantalla la gráfica solicitada
@@ -57,82 +42,106 @@ def graficos_menu(datos):
         print("=======================================")
         print("1. Historico")
         print("2. Vacunación")
-        print("3. Muertes")
-        print("4. Genero")
-        #print("5. ")
-        #print("6. Grafico por Fecha de Vacunación")
-        #print("7. Grafico por Hora de Vacunación")
-        print("8. Volver Atrás")
+        print("3. Nuevos Casos Diarios")
+        print("4. Pruebas Covid-19")
+        print("5. Volver Atrás")
         print("---------------------------------------")
         a=int(input("Escriba la opcion: "))
-        #Según lo seleccionado por el usuario, se carga en la variable b el dato que se requiere graficar
-        if a==1: grafico_historico(datos)
-        elif a==2: grafico_vacunas(datos)
-        elif a==3: b="etapa"        
-        elif a==4: b="genero"
-        elif a==8: break
+        #Según lo seleccionado por el usuario, se prepara la información para la gráfica
+        if a==1:
+            Y = datos.iloc[0:,4].values # Total de Casos por día
+            Z = datos.iloc[0:,7].values # Total de Muertes por día
+            W = ""
+            X = datos.iloc[0:,3] # fecha    
+            titulo = "Histórico de Contagios COVID-19 en Colombia"
+            ly = "Contagios"
+            lz = "Muertes"
+            ly2 = "Millones de Personas"
+            lx = "Entre Marzo 2020 y Junio 2021"
+            lw = ""
+            ig = 1
+            graficar(X,Y,Z,W,titulo,ly,ly2,lz,lx,lw,ig)
+        elif a==2:
+            Y = datos.iloc[0:,35].values # Primeras Dosis Aplicadas
+            Z = datos.iloc[0:,36].values # Segundas Dosis Aplicadas
+            W = datos.iloc[0:,34].values # Total de Vacunas
+            X = datos.iloc[0:,3] # fecha
+            titulo = "Avance de Vacunación COVID-19 en Colombia"
+            ly = "Primera Dosis Aplicadas"
+            lz = "Segunda Dosis Aplicadas"
+            ly2 = "Cantidad Vacunas en Millones"
+            lx = "Inicio Jornada Vacunación en Colombia 17-Feb-2021"
+            lw = "Total de Vacunas Adquiridas"
+            ig = 2
+            graficar(X,Y,Z,W,titulo,ly,ly2,lz,lx,lw,ig)
+        elif a==3:
+            Y = datos.iloc[0:,5].values # Nuevos Casos por Día
+            Z = datos.iloc[0:,8].values # Nuevas Muertes Por Día
+            W = ""
+            X = datos.iloc[0:,3] # fecha
+            titulo = "Casos vs Muertes Diarias"
+            ly = "Casos"
+            lz = "Muertes"
+            ly2 = "Cantidad de Personas"
+            lx = "Entre Marzo 2020 y Junio 2021"
+            lw = ""
+            ig = 3
+            graficar(X,Y,Z,W,titulo,ly,ly2,lz,lx,lw,ig)        
+        elif a==4:
+            Y = datos.iloc[0:,28].values # Nuevas pruebas por mil habitantes
+            Z = ""
+            W = datos.iloc[0:,31].values # Rate Positivo de pruebas por día
+            X = datos.iloc[0:,3] # fecha
+            titulo = "Pruebas Covid-19 en Colombia"
+            ly = "Pruebas Realizadas por cada 1000 hab."
+            lz = ""
+            ly2 = "Cantidad de Pruebas"
+            lx = ""
+            lw = "Ratio de Positivos por día"
+            ig = 4
+            graficar(X,Y,Z,W,titulo,ly,ly2,lz,lx,lw,ig)
+        elif a==5: break
         else: print("Opción no válida, intente de nuevo")
                 
     return None
 
-def grafico_historico(a):
-    Y = a.iloc[0:,4].values # confirmados diarios
-    #R = data.iloc[61:,3].values # recuperados diarios
-    D = a.iloc[0:,7].values # difuntos diarios
-    X = a.iloc[0:,3] # fecha
-    
-    plt.figure() 
-    ax = plt.axes()
-    ax.grid(linewidth=0.2, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
-    ax.set_facecolor("black") # FONDO DEL COLOR DEL GRAFICO
-    ax.set_xlabel('\nFecha',size=12,color='#4bb4f2')
-    ax.set_ylabel('Casos Confirmados\n',
-              size=25,color='#4bb4f2')
+#IV_07_RS_04
+def graficar(X,Y,Z,W,titulo,ly,ly2,lz,lx,lw,ig):
+    """ 
+    Parameters
+    ----------
+    X,Y,Z,W,titulo,ly,ly2,lz,lx,lw,ig: String
+        Variables con cada uno de los datos de los ejes, y titulos para la gráfica
+    Returns
+    -------
+        Imprime en Pantalla la gráfica solicitada
+    """
+    plt.style.use('seaborn') #Estilo de la gráfica
+    plt.figure()  #Nueva figura
+    ax = plt.axes()  #Variable para los componentes de la figura
+    ax.set_xlabel(lx,size=14)  #Tamaño de fuente para labels de los ejes
+    ax.set_ylabel(ly2,size=14)
 
-    plt.xticks(rotation='vertical',size='20',color='white') # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
-    plt.yticks(size=20,color='white')
-    plt.tick_params(size=20,color='white')
-  
-    #for i,j in zip(X,Y):
-    #    ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
+    plt.xticks(color='#FFFFFF') #Label eje X en blanco ya que son muchos y no se ven bien
+    plt.yticks(size=8)   # Tamaño del eje Y
+    plt.title(titulo,size=30) #Titulo de la gráfica
     
-    plt.title("Historico COVID-19 en Colombia\n",
-          size=30,color='#28a9ff')
-  
-    ax.plot(X,Y,color='#1F77B4',linewidth=1,label='Contagios')
-    ax.plot(X,D,color='#b4331f',linewidth=1,label='Muertes')
+    #Bandera para saber que vectores graficar segun el grafico
+    if ig==1:
+        ax.plot(X,Y,color='#0f5396',linewidth=2,label=ly)
+        ax.plot(X,Z,color='#960f0f',linewidth=2,label=lz)
+    elif ig==2:
+        ax.plot(X,W,color='#095e13',linewidth=2,label=lw)
+        ax.plot(X,Y,color='#3a62bd',linewidth=2,label=ly)
+        ax.plot(X,Z,color='#663abd',linewidth=2,label=lz)
+    elif ig==3:
+        plt.bar(X,Y,label=ly,color='#8c9190')
+        plt.bar(X,Z,label=lz,color='#bd0202')
+    elif ig==4:
+        plt.bar(X,Y,label=ly,color='#4da4d6')
+        plt.bar(X,W,label=lw,color='#d64d4d')
+    
     plt.legend()
-
-    plt.show()
-    return None
-
-def grafico_vacunas(a):
-    plt.style.use('seaborn')
-    Y = a.iloc[0:,35].values # Personas Vacunadas
-    R = a.iloc[0:,36].values # Segundas Dosis
-    D = a.iloc[0:,34].values # Total de Vacunas
-    X = a.iloc[0:,3] # fecha
-    
-    plt.figure() 
-    ax = plt.axes()  #Defino la grafica
-    #ax.grid(linewidth=0.2, color='#8f8f8f') # CREAR UNA CUADRICULA A LO LARGO DEL GRAFICO
-    ax.set_ylabel('Millones de Dosis\n',size=25,color='#4bb4f2')
-
-    plt.xticks(rotation='vertical',size=8) # MODIFICAR LAS FECHAS Y LA FUENTE DIARIA
-    plt.yticks(size=8)
-    #plt.tick_params(size=20,color='white')
-  
-    #for i,j in zip(X,Y):
-    #    ax.annotate(str(j),xy=(i,j+100),color='white',size='13')
-    
-    plt.title("Vacunación COVID-19 en Colombia\n",
-          size=30,color='#28a9ff')
-  
-    ax.plot(X,D,color='#42f5ec',linewidth=2,label='Total de Vacunas')
-    ax.plot(X,Y,color='#dd42f5',linewidth=2,label='Primera Dosis')
-    ax.plot(X,R,color='#42f587',linewidth=2,label='Segunda Dosis')
-    plt.legend()
-
     plt.show()
     return None
 
